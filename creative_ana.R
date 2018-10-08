@@ -11,6 +11,7 @@ library(gdata)
 
 #load the global dataset
 creadat<-read.table("creative_data.txt",header=T,sep="\t")
+creadat$species<-factor(creadat$species,levels=rev(levels(creadat$species)))
 collist<-c("forestgreen","black")
 
 
@@ -28,7 +29,7 @@ bosc_rez<-as.character(bosc.dat[bosc.dat$dose=="30" & bosc.dat$perc_croiss>50,
 REZbos<-data.frame("strain_ID"=as.character(),"ED50"=as.character())
 #we limit the dataset to the sample that reach somehow a IC of 50%
 #bosc.dat<-bosc.dat[!(bosc.dat$sample_ID %in% bosc_rez),]
-bosc.dat<-drop.levels(bosc.dat)
+bosc.dat<-drop.levels(bosc.dat,reorder=FALSE)
 pdf("boscalid.pdf",width=12,height=30)
 op<-par(mfrow=c(10,4))
 for (i in 1: dim(table(bosc.dat$strain_ID))[1]) {
@@ -87,7 +88,7 @@ dodi_rez<-as.character(dodi.dat[dodi.dat$dose=="30" & dodi.dat$perc_croiss>50,
 REZdod<-data.frame("strain_ID"=as.character(),"ED50"=as.character())
 #we limit the dataset to the sample that reach somehow a IC of 50%
 #dodi.dat<-dodi.dat[!(dodi.dat$sample_ID %in% dodi_rez),]
-dodi.dat<-drop.levels(dodi.dat)
+dodi.dat<-drop.levels(dodi.dat,reorder=FALSE)
 pdf("dodine.pdf",width=12,height=30)
 op<-par(mfrow=c(10,4))
 for (i in 1: dim(table(dodi.dat$strain_ID))[1]) {
@@ -132,7 +133,7 @@ dife_rez<-as.character(dife.dat[dife.dat$dose=="30" & dife.dat$perc_croiss>50,
 REZdif<-data.frame("strain_ID"=as.character(),"ED50"=as.character())
 #we limit the dataset to the sample that reach somehow a IC of 50%
 #dife.dat<-dife.dat[!(dife.dat$sample_ID %in% dife_rez),]
-dife.dat<-drop.levels(dife.dat)
+dife.dat<-drop.levels(dife.dat,reorder=FALSE)
 pdf("difenoconazole.pdf",width=12,height=30)
 op<-par(mfrow=c(10,4))
 for (i in 1: dim(table(dife.dat$strain_ID))[1]) {
@@ -177,7 +178,7 @@ trif_rez<-as.character(trif.dat[trif.dat$dose=="30" & trif.dat$perc_croiss>50,
 REZtri<-data.frame("strain_ID"=as.character(),"ED50"=as.character())
 #we limit the dataset to the sample that reach somehow a IC of 50%
 #trif.dat<-trif.dat[!(trif.dat$sample_ID %in% trif_rez),]
-trif.dat<-drop.levels(trif.dat)
+trif.dat<-drop.levels(trif.dat,reorder=FALSE)
 pdf("trifloxystrobine.pdf",width=12,height=30)
 op<-par(mfrow=c(10,4))
 for (i in 1: dim(table(trif.dat$strain_ID))[1]) {
