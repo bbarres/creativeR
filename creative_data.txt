@@ -1354,10 +1354,10 @@ strain_ID	species	strain_type	active_substance	test_start	test_read	nb_day	dose	
 2479	V. inaequalis	study	trifloxystrobine	28-Jun-18	9-Aug-18	42	0.03	40.0
 2479	V. inaequalis	study	trifloxystrobine	28-Jun-18	9-Aug-18	42	0.1	10.0
 2479	V. inaequalis	study	trifloxystrobine	28-Jun-18	9-Aug-18	42	0.3	10.0
-2479	V. inaequalis	study	trifloxystrobine	28-Jun-18	9-Aug-18	42	1	20.0
-2479	V. inaequalis	study	trifloxystrobine	28-Jun-18	9-Aug-18	42	3	20.0
-2479	V. inaequalis	study	trifloxystrobine	28-Jun-18	9-Aug-18	42	10	20.0
-2479	V. inaequalis	study	trifloxystrobine	28-Jun-18	9-Aug-18	42	30	20.0
+2479	V. inaequalis	study	trifloxystrobine	28-Jun-18	9-Aug-18	42	1	10.0
+2479	V. inaequalis	study	trifloxystrobine	28-Jun-18	9-Aug-18	42	3	10.0
+2479	V. inaequalis	study	trifloxystrobine	28-Jun-18	9-Aug-18	42	10	10.0
+2479	V. inaequalis	study	trifloxystrobine	28-Jun-18	9-Aug-18	42	30	10.0
 2480	V. inaequalis	study	trifloxystrobine	28-Jun-18	9-Aug-18	42	0	100.0
 2480	V. inaequalis	study	trifloxystrobine	28-Jun-18	9-Aug-18	42	0.01	55.0
 2480	V. inaequalis	study	trifloxystrobine	28-Jun-18	9-Aug-18	42	0.03	20.0
