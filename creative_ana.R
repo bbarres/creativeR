@@ -44,7 +44,7 @@ for (i in 1: dim(table(bosc.dat$strain_ID))[1]) {
   } else {
     temp.m1<-drm(perc_croiss~dose,
                  data=datatemp,
-                 fct=LN.4())
+                 fct=LL.4())
     plot(temp.m1,ylim=c(-10,120),xlim=c(0,30),col=couleur,
          lty=typeline,main=names(table(bosc.dat$strain_ID))[i])
     plot(temp.m1,ylim=c(-10,120),xlim=c(0,30),col=couleur,
@@ -86,7 +86,7 @@ dodi_rez<-as.character(dodi.dat[dodi.dat$dose=="30" & dodi.dat$perc_croiss>50,
                                 "sample_ID"])
 REZdod<-data.frame("strain_ID"=as.character(),"ED50"=as.character())
 #we limit the dataset to the sample that reach somehow a IC of 50%
-#dodi.dat<-dodi.dat[!(dodi.dat$sample_ID %in% bosc_rez),]
+#dodi.dat<-dodi.dat[!(dodi.dat$sample_ID %in% dodi_rez),]
 dodi.dat<-drop.levels(dodi.dat)
 pdf("dodine.pdf",width=12,height=30)
 op<-par(mfrow=c(10,4))
@@ -103,7 +103,7 @@ for (i in 1: dim(table(dodi.dat$strain_ID))[1]) {
   } else {
     temp.m1<-drm(perc_croiss~dose,
                  data=datatemp,
-                 fct=LN.4())
+                 fct=LL.4())
     plot(temp.m1,ylim=c(-10,120),xlim=c(0,30),col=couleur,
          lty=typeline,main=names(table(dodi.dat$strain_ID))[i])
     plot(temp.m1,ylim=c(-10,120),xlim=c(0,30),col=couleur,
@@ -118,60 +118,108 @@ par(op)
 dev.off()
 
 
-
 ###############################################################################
-#combined plot
+#Analysis for the difenoconazole
 ###############################################################################
 
-op<-par(mfrow=c(2,2))
+#subsetting the global dataset
+dife.dat<-creadat[creadat$active_substance=="difenoconazole",]
 
-plot(REZbos$ED50[order(REZbos$ED50)],main="Boscalid")
-abline(0.39,0,col="green3",lwd=2)
-abline(3.9,0,col="orange3",lwd=2)
-
-plot(REZbix$ED50[order(REZbix$ED50)],main="Bixafen")
-abline(0.08,0,col="green3",lwd=2)
-abline(0.8,0,col="orange3",lwd=2)
-
-plot(REZflo$ED50[order(REZflo$ED50)],main="Fluopyram")
-abline(0.44,0,col="green3",lwd=2)
-abline(4.4,0,col="orange3",lwd=2)
-
-plot(REZflx$ED50[order(REZflx$ED50)],main="Fluxapyroxade")
-abline(0.21,0,col="green3",lwd=2)
-abline(2.1,0,col="orange3",lwd=2)
-
+#some individual never reach an inhibition of 50%, event for the highest 
+#tested concentration. 
+dife_rez<-as.character(dife.dat[dife.dat$dose=="30" & dife.dat$perc_croiss>50,
+                                "sample_ID"])
+REZdif<-data.frame("strain_ID"=as.character(),"ED50"=as.character())
+#we limit the dataset to the sample that reach somehow a IC of 50%
+#dife.dat<-dife.dat[!(dife.dat$sample_ID %in% dife_rez),]
+dife.dat<-drop.levels(dife.dat)
+pdf("difenoconazole.pdf",width=12,height=30)
+op<-par(mfrow=c(10,4))
+for (i in 1: dim(table(dife.dat$strain_ID))[1]) {
+  datatemp<-dife.dat[dife.dat$strain_ID==names(table(dife.dat$strain_ID))[i],]
+  couleur<-collist[as.numeric(datatemp$strain_type)]
+  typeline<-as.numeric(datatemp$species)[1]
+  if (is.na(datatemp[1,"perc_croiss"])==TRUE) {
+    tempx<-data.frame("strain_ID"=names(table(dife.dat$strain_ID))[i],
+                      "ED50"=c("NA"))
+    REZdif<-rbind(REZdif,tempx)
+    plot(0,1,ylim=c(-10,120),xlim=c(0,30),col=couleur,
+         main=names(table(dife.dat$strain_ID))[i])
+  } else {
+    temp.m1<-drm(perc_croiss~dose,
+                 data=datatemp,
+                 fct=LL.4())
+    plot(temp.m1,ylim=c(-10,120),xlim=c(0,30),col=couleur,
+         lty=typeline,main=names(table(dife.dat$strain_ID))[i])
+    plot(temp.m1,ylim=c(-10,120),xlim=c(0,30),col=couleur,
+         lty=typeline,type="confidence",add=TRUE)
+    temp<-ED(temp.m1,50,type="absolute")
+    tempx<-data.frame("strain_ID"=names(table(dife.dat$strain_ID))[i],
+                      "ED50"=temp[1])
+    REZdif<-rbind(REZdif,tempx)
+  }
+}
 par(op)
+dev.off()
 
 
 ###############################################################################
-#plot with individual group by pop
+#Analysis for the trifloxystrobine
 ###############################################################################
 
-EC50_pop<-read.table("EC50_byPOP.txt",header=TRUE)
+#subsetting the global dataset
+trif.dat<-creadat[creadat$active_substance=="trifloxystrobine",]
 
-op<-par(mfrow=c(2,2),mar=c(2,2.5,3,1))
-EC50bosc<-EC50_pop[EC50_pop$SA_ID=="boscalid",]
-plot(EC50bosc$ED50,col=as.character(EC50bosc$pop_col),main="Boscalid")
-abline(0.39,0,col="green3",lwd=2)
-abline(3.9,0,col="orange3",lwd=2)
-
-EC50bixa<-EC50_pop[EC50_pop$SA_ID=="bixafen",]
-plot(EC50bixa$ED50,col=as.character(EC50bixa$pop_col),main="Bixafen")
-abline(0.08,0,col="green3",lwd=2)
-abline(0.8,0,col="orange3",lwd=2)
-
-EC50fluo<-EC50_pop[EC50_pop$SA_ID=="fluopyram",]
-plot(EC50fluo$ED50,col=as.character(EC50fluo$pop_col),main="Fluopyram")
-abline(0.44,0,col="green3",lwd=2)
-abline(4.4,0,col="orange3",lwd=2)
-
-EC50flux<-EC50_pop[EC50_pop$SA_ID=="fluxapyroxade",]
-plot(EC50flux$ED50,col=as.character(EC50flux$pop_col),main="Fluxapyroxade")
-abline(0.21,0,col="green3",lwd=2)
-abline(2.1,0,col="orange3",lwd=2)
-
+#some individual never reach an inhibition of 50%, event for the highest 
+#tested concentration. 
+trif_rez<-as.character(trif.dat[trif.dat$dose=="30" & trif.dat$perc_croiss>50,
+                                "sample_ID"])
+REZtri<-data.frame("strain_ID"=as.character(),"ED50"=as.character())
+#we limit the dataset to the sample that reach somehow a IC of 50%
+#trif.dat<-trif.dat[!(trif.dat$sample_ID %in% trif_rez),]
+trif.dat<-drop.levels(trif.dat)
+pdf("trifloxystrobine.pdf",width=12,height=30)
+op<-par(mfrow=c(10,4))
+for (i in 1: dim(table(trif.dat$strain_ID))[1]) {
+  datatemp<-trif.dat[trif.dat$strain_ID==names(table(trif.dat$strain_ID))[i],]
+  couleur<-collist[as.numeric(datatemp$strain_type)]
+  typeline<-as.numeric(datatemp$species)[1]
+  if (is.na(datatemp[1,"perc_croiss"])==TRUE) {
+    tempx<-data.frame("strain_ID"=names(table(trif.dat$strain_ID))[i],
+                      "ED50"=c("NA"))
+    REZtri<-rbind(REZtri,tempx)
+    plot(0,1,ylim=c(-10,120),xlim=c(0,30),col=couleur,
+         main=names(table(trif.dat$strain_ID))[i])
+  } else {
+    temp.m1<-drm(perc_croiss~dose,
+                 data=datatemp,
+                 fct=LL.4())
+    plot(temp.m1,ylim=c(-10,120),xlim=c(0,30),col=couleur,
+         lty=typeline,main=names(table(trif.dat$strain_ID))[i])
+    plot(temp.m1,ylim=c(-10,120),xlim=c(0,30),col=couleur,
+         lty=typeline,type="confidence",add=TRUE)
+    temp<-ED(temp.m1,50,type="absolute")
+    tempx<-data.frame("strain_ID"=names(table(trif.dat$strain_ID))[i],
+                      "ED50"=temp[1])
+    REZtri<-rbind(REZtri,tempx)
+  }
+}
 par(op)
+dev.off()
+
+
+###############################################################################
+#combined results and export
+###############################################################################
+
+REZ<-rbind(REZbos,REZdif,REZdod,REZtri)
+REZ<-cbind(REZ,"active_substance"=c(rep("boscalid",39),
+                                    rep("difenoconazole",39),
+                                    rep("dodine",39),
+                                    rep("trifloxystrobine",39)))
+
+write.table(REZ,file="result_CI50.txt",quote=FALSE,col.names=TRUE, 
+            row.names=FALSE,sep="\t")
 
 
 ###############################################################################
