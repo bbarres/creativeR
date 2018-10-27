@@ -10,7 +10,7 @@ library(plotrix)
 library(gdata)
 
 #load the global dataset
-creadat<-read.table("creative_data.txt",header=T,sep="\t")
+creadat<-read.table(file="data/creative_data.txt",header=T,sep="\t")
 creadat$species<-factor(creadat$species,levels=rev(levels(creadat$species)))
 collist<-c("forestgreen","black")
 
@@ -30,7 +30,7 @@ REZbos<-data.frame("strain_ID"=as.character(),"ED50"=as.character())
 #we limit the dataset to the sample that reach somehow a IC of 50%
 #bosc.dat<-bosc.dat[!(bosc.dat$sample_ID %in% bosc_rez),]
 bosc.dat<-drop.levels(bosc.dat,reorder=FALSE)
-pdf("boscalid.pdf",width=12,height=30)
+pdf(file="output/boscalid.pdf",width=12,height=30)
 op<-par(mfrow=c(10,4))
 for (i in 1: dim(table(bosc.dat$strain_ID))[1]) {
   datatemp<-bosc.dat[bosc.dat$strain_ID==names(table(bosc.dat$strain_ID))[i],]
@@ -59,20 +59,6 @@ for (i in 1: dim(table(bosc.dat$strain_ID))[1]) {
 par(op)
 dev.off()
 
-REZbos$ED50[REZbos$ED50>30]<-30
-plot(REZbos$ED50[order(REZbos$ED50)]/0.39,main="Boscalid",xlab="Souches ID",
-     ylab="FR",las=1)
-abline(0.39/0.39,0,col="green4",lwd=2)
-abline(3.9/0.39,0,col="red",lwd=2)
-#export to pdf 10 x 6 inches
-write.table(REZbos,file="REZbos.txt",quote=FALSE,sep="\t",row.names=FALSE)
-
-hist(REZbos$ED50[order(REZbos$ED50)]/0.39,main="Boscalid",xlab="FR Classes",
-     breaks=c(0,10,20,30,40,50,60,70,80,90,100,110,120,130,140,150),
-     las=1,col=heat.colors(8)[8:1],ylim=c(0,450))
-abline(v=10,col="red",lwd=3)
-#export to pdf 4.5 x 9 inches
-
 
 ###############################################################################
 #Analysis for the dodine
@@ -89,7 +75,7 @@ REZdod<-data.frame("strain_ID"=as.character(),"ED50"=as.character())
 #we limit the dataset to the sample that reach somehow a IC of 50%
 #dodi.dat<-dodi.dat[!(dodi.dat$sample_ID %in% dodi_rez),]
 dodi.dat<-drop.levels(dodi.dat,reorder=FALSE)
-pdf("dodine.pdf",width=12,height=30)
+pdf("output/dodine.pdf",width=12,height=30)
 op<-par(mfrow=c(10,4))
 for (i in 1: dim(table(dodi.dat$strain_ID))[1]) {
   datatemp<-dodi.dat[dodi.dat$strain_ID==names(table(dodi.dat$strain_ID))[i],]
@@ -134,7 +120,7 @@ REZdif<-data.frame("strain_ID"=as.character(),"ED50"=as.character())
 #we limit the dataset to the sample that reach somehow a IC of 50%
 #dife.dat<-dife.dat[!(dife.dat$sample_ID %in% dife_rez),]
 dife.dat<-drop.levels(dife.dat,reorder=FALSE)
-pdf("difenoconazole.pdf",width=12,height=30)
+pdf("output/difenoconazole.pdf",width=12,height=30)
 op<-par(mfrow=c(10,4))
 for (i in 1: dim(table(dife.dat$strain_ID))[1]) {
   datatemp<-dife.dat[dife.dat$strain_ID==names(table(dife.dat$strain_ID))[i],]
@@ -179,7 +165,7 @@ REZtri<-data.frame("strain_ID"=as.character(),"ED50"=as.character())
 #we limit the dataset to the sample that reach somehow a IC of 50%
 #trif.dat<-trif.dat[!(trif.dat$sample_ID %in% trif_rez),]
 trif.dat<-drop.levels(trif.dat,reorder=FALSE)
-pdf("trifloxystrobine.pdf",width=12,height=30)
+pdf("output/trifloxystrobine.pdf",width=12,height=30)
 op<-par(mfrow=c(10,4))
 for (i in 1: dim(table(trif.dat$strain_ID))[1]) {
   datatemp<-trif.dat[trif.dat$strain_ID==names(table(trif.dat$strain_ID))[i],]
@@ -219,10 +205,26 @@ REZ<-cbind(REZ,"active_substance"=c(rep("boscalid",39),
                                     rep("dodine",39),
                                     rep("trifloxystrobine",39)))
 
-write.table(REZ,file="result_CI50.txt",quote=FALSE,col.names=TRUE, 
+write.table(REZ,file="output/result_CI50.txt",quote=FALSE,col.names=TRUE, 
             row.names=FALSE,sep="\t")
 
 
 ###############################################################################
 #END
 ###############################################################################
+
+
+REZbos$ED50[REZbos$ED50>30]<-30
+plot(REZbos$ED50[order(REZbos$ED50)]/0.39,main="Boscalid",xlab="Souches ID",
+     ylab="FR",las=1)
+abline(0.39/0.39,0,col="green4",lwd=2)
+abline(3.9/0.39,0,col="red",lwd=2)
+#export to pdf 10 x 6 inches
+write.table(REZbos,file="output/REZbos.txt",quote=FALSE,sep="\t",row.names=FALSE)
+
+hist(REZbos$ED50[order(REZbos$ED50)]/0.39,main="Boscalid",xlab="FR Classes",
+     breaks=c(0,10,20,30,40,50,60,70,80,90,100,110,120,130,140,150),
+     las=1,col=heat.colors(8)[8:1],ylim=c(0,450))
+abline(v=10,col="red",lwd=3)
+#export to pdf 4.5 x 9 inches
+
