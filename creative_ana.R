@@ -21,11 +21,12 @@ collist<-c("forestgreen","black")
 
 #subsetting the global dataset
 bosc.dat<-creadat[creadat$active_substance=="boscalid",]
+bosc.dat<-bosc.dat[!is.na(bosc.dat$perc_croiss),]
 
 #some individual never reach an inhibition of 50%, event for the highest 
 #tested concentration. 
 bosc_rez<-as.character(bosc.dat[bosc.dat$dose=="30" & bosc.dat$perc_croiss>50,
-                                "sample_ID"])
+                                "strain_ID"])
 REZbos<-data.frame("strain_ID"=as.character(),"ED50"=as.character())
 #we limit the dataset to the sample that reach somehow a IC of 50%
 #bosc.dat<-bosc.dat[!(bosc.dat$sample_ID %in% bosc_rez),]
@@ -66,11 +67,12 @@ dev.off()
 
 #subsetting the global dataset
 dodi.dat<-creadat[creadat$active_substance=="dodine",]
+dodi.dat<-dodi.dat[!is.na(dodi.dat$perc_croiss),]
 
 #some individual never reach an inhibition of 50%, event for the highest 
 #tested concentration. 
 dodi_rez<-as.character(dodi.dat[dodi.dat$dose=="30" & dodi.dat$perc_croiss>50,
-                                "sample_ID"])
+                                "strain_ID"])
 REZdod<-data.frame("strain_ID"=as.character(),"ED50"=as.character())
 #we limit the dataset to the sample that reach somehow a IC of 50%
 #dodi.dat<-dodi.dat[!(dodi.dat$sample_ID %in% dodi_rez),]
@@ -111,11 +113,12 @@ dev.off()
 
 #subsetting the global dataset
 dife.dat<-creadat[creadat$active_substance=="difenoconazole",]
+dife.dat<-dife.dat[!is.na(dife.dat$perc_croiss),]
 
 #some individual never reach an inhibition of 50%, event for the highest 
 #tested concentration. 
 dife_rez<-as.character(dife.dat[dife.dat$dose=="30" & dife.dat$perc_croiss>50,
-                                "sample_ID"])
+                                "strain_ID"])
 REZdif<-data.frame("strain_ID"=as.character(),"ED50"=as.character())
 #we limit the dataset to the sample that reach somehow a IC of 50%
 #dife.dat<-dife.dat[!(dife.dat$sample_ID %in% dife_rez),]
@@ -156,14 +159,15 @@ dev.off()
 
 #subsetting the global dataset
 trif.dat<-creadat[creadat$active_substance=="trifloxystrobine",]
+trif.dat<-trif.dat[!is.na(trif.dat$perc_croiss),]
 
 #some individual never reach an inhibition of 50%, event for the highest 
 #tested concentration. 
 trif_rez<-as.character(trif.dat[trif.dat$dose=="30" & trif.dat$perc_croiss>50,
-                                "sample_ID"])
+                                "strain_ID"])
 REZtri<-data.frame("strain_ID"=as.character(),"ED50"=as.character())
 #we limit the dataset to the sample that reach somehow a IC of 50%
-#trif.dat<-trif.dat[!(trif.dat$sample_ID %in% trif_rez),]
+trif.dat<-trif.dat[!(trif.dat$strain_ID %in% trif_rez),]
 trif.dat<-drop.levels(trif.dat,reorder=FALSE)
 pdf("output/trifloxystrobine.pdf",width=12,height=30)
 op<-par(mfrow=c(10,4))
