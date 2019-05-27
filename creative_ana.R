@@ -204,10 +204,10 @@ dev.off()
 ###############################################################################
 
 REZ<-rbind(REZbos,REZdif,REZdod,REZtri)
-REZ<-cbind(REZ,"active_substance"=c(rep("boscalid",39),
-                                    rep("difenoconazole",39),
-                                    rep("dodine",39),
-                                    rep("trifloxystrobine",39)))
+REZ<-cbind(REZ,"active_substance"=c(rep("boscalid",dim(REZbos)[1]),
+                                    rep("difenoconazole",dim(REZdif)[1]),
+                                    rep("dodine",dim(REZdod)[1]),
+                                    rep("trifloxystrobine",dim(REZtri)[1])))
 
 write.table(REZ,file="output/result_CI50.txt",quote=FALSE,col.names=TRUE, 
             row.names=FALSE,sep="\t")
@@ -224,7 +224,8 @@ plot(REZbos$ED50[order(REZbos$ED50)]/0.39,main="Boscalid",xlab="Souches ID",
 abline(0.39/0.39,0,col="green4",lwd=2)
 abline(3.9/0.39,0,col="red",lwd=2)
 #export to pdf 10 x 6 inches
-write.table(REZbos,file="output/REZbos.txt",quote=FALSE,sep="\t",row.names=FALSE)
+write.table(REZbos,file="output/REZbos.txt",quote=FALSE,sep="\t",
+            row.names=FALSE)
 
 hist(REZbos$ED50[order(REZbos$ED50)]/0.39,main="Boscalid",xlab="FR Classes",
      breaks=c(0,10,20,30,40,50,60,70,80,90,100,110,120,130,140,150),
