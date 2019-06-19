@@ -70,4 +70,32 @@ REZ_VeGeMane<-REZ_VeGeMane[order(as.numeric(as.character(REZ_VeGeMane$ED50))),]
 plot(as.numeric(as.character(REZ_VeGeMane$ED50)),col=REZ_VeGeMane$X2,pch=19,cex=2, 
      main="Venturia manebe germination")
 
+#Alternaria plot
+plot(sort(as.numeric(as.character(REZ_AlMyBosc$ED50))),
+     main="Alternaria boscalid mycelial growth",
+     ylim=c(0,max(as.numeric(as.character(REZ_AlMyBosc$ED50)),na.rm=TRUE))
+)
+
+plot(sort(as.numeric(as.character(REZ_AlMyCypr$ED50))),
+     main="Alternaria cyprodinil mycelial growth",
+     ylim=c(0,max(as.numeric(as.character(REZ_AlMyCypr$ED50)),na.rm=TRUE))
+)
+
+plot(sort(as.numeric(as.character(REZ_AlMyDife$ED50))),
+     main="Alternaria difenoconazole mycelial growth",
+     ylim=c(0,max(as.numeric(as.character(REZ_AlMyDife$ED50)),na.rm=TRUE))
+)
+
+plot(sort(as.numeric(as.character(REZ_AlMyDodi$ED50))),
+     main="Alternaria dodine mycelial growth",
+     ylim=c(0,max(as.numeric(as.character(REZ_AlMyDodi$ED50)),na.rm=TRUE))
+)
+
+plot(sort(as.numeric(as.character(REZ_AlMyFluop$ED50))),
+     main="Alternaria fluopyram mycelial growth",
+     ylim=c(0,max(as.numeric(as.character(REZ_AlMyFluop$ED50)),na.rm=TRUE))
+)
+
+
+
 
