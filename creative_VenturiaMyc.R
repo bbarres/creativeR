@@ -246,7 +246,9 @@ REZ_VeMyTrif<-data.frame(REZsub[sort(REZsub$strain_ID),],
                          "SubsAct"="trifloxystrobine")
 
 #concatenating the different result files
-REZ_VeMy<-cbind
+REZ_VeMy<-rbind(REZ_VeMyBosc,REZ_VeMyDife,REZ_VeMyDodi,REZ_VeMyTrif)
+write.table(REZ_VeMy,file="output/Venturia_mycelial.txt",quote=FALSE,
+            col.names=TRUE,row.names=FALSE,sep="\t")
 
 
 ###############################################################################

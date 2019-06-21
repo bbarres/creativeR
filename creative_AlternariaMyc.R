@@ -536,6 +536,14 @@ REZ_AlMyTrif<-data.frame(REZsub[sort(REZsub$strain_ID),],
                           "SubsAct"="trifloxystrobine")
 
 
+#concatenating the different result files
+REZ_AlMy<-rbind(REZ_AlMyBosc,REZ_AlMyCapt,REZ_AlMyCarb,REZ_AlMyCypr,
+                REZ_AlMyDife,REZ_AlMyDith,REZ_AlMyDodi,REZ_AlMyFluop,
+                REZ_AlMyTrif)
+write.table(REZ_AlMy,file="output/Alternaria_mycelial.txt",quote=FALSE,
+            col.names=TRUE,row.names=FALSE,sep="\t")
+
+
 ###############################################################################
 #END
 ###############################################################################

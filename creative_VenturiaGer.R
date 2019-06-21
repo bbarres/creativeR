@@ -597,6 +597,14 @@ REZ_VeGeTrif<-data.frame(REZsub[sort(REZsub$strain_ID),],
                          "SubsAct"="trifloxystrobine")
 
 
+#concatenating the different result files
+REZ_VeGe<-rbind(REZ_VeGeBosc,REZ_VeGeCapt,REZ_VeGeCypr,REZ_VeGeDife,
+                REZ_VeGeDith,REZ_VeGeDodi,REZ_VeGeManc,REZ_VeGeMane,
+                REZ_VeGeThir,REZ_VeGeTrif)
+write.table(REZ_VeGe,file="output/Venturia_germination.txt",quote=FALSE,
+            col.names=TRUE,row.names=FALSE,sep="\t")
+
+
 ###############################################################################
 #END
 ###############################################################################
