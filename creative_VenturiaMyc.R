@@ -39,13 +39,14 @@ for (i in 1: dim(table(subdat$strain_ID))[1]) {
   datatemp<-subdat[subdat$strain_ID==names(table(subdat$strain_ID))[i],]
   couleur<-collist[as.numeric(datatemp$strain_type)]
   typeline<-as.numeric(datatemp$species)[1]
+  print(as.character(datatemp$strain_ID[1]))
   if (is.na(datatemp[1,"perc_croiss"])==TRUE) {
     tempx<-data.frame("strain_ID"=names(table(subdat$strain_ID))[i],
                       "ED50"=c("NA"))
     REZsub<-rbind(REZsub,tempx)
     plot(0,1,ylim=c(-10,120),xlim=c(0,30),col=couleur,
          main=names(table(subdat$strain_ID))[i])
-  } else {
+  } else { tryCatch({
     temp.m1<-drm(perc_croiss~dose,
                  data=datatemp,
                  fct=LL.4())
@@ -53,10 +54,17 @@ for (i in 1: dim(table(subdat$strain_ID))[1]) {
          lty=typeline,main=names(table(subdat$strain_ID))[i])
     plot(temp.m1,ylim=c(-10,120),xlim=c(0,30),col=couleur,
          lty=typeline,type="confidence",add=TRUE)
-    temp<-ED(temp.m1,50,type="absolute")
-    tempx<-data.frame("strain_ID"=names(table(subdat$strain_ID))[i],
-                      "ED50"=as.character(temp[1]))
+  },error=function(e){cat("ERROR :",conditionMessage(e), "\n")})
+    if (!exists("temp.m1")){
+      tempx<-data.frame("strain_ID"=names(table(subdat$strain_ID))[i],
+                        "ED50"="ERROR")
+    } else {
+      temp<-ED(temp.m1,50,type="absolute")
+      tempx<-data.frame("strain_ID"=names(table(subdat$strain_ID))[i],
+                        "ED50"=as.character(temp[1]))
+    }
     REZsub<-rbind(REZsub,tempx)
+    rm(temp.m1)
   }
 }
 par(op)
@@ -88,13 +96,14 @@ for (i in 1: dim(table(subdat$strain_ID))[1]) {
   datatemp<-subdat[subdat$strain_ID==names(table(subdat$strain_ID))[i],]
   couleur<-collist[as.numeric(datatemp$strain_type)]
   typeline<-as.numeric(datatemp$species)[1]
+  print(as.character(datatemp$strain_ID[1]))
   if (is.na(datatemp[1,"perc_croiss"])==TRUE) {
     tempx<-data.frame("strain_ID"=names(table(subdat$strain_ID))[i],
                       "ED50"=c("NA"))
     REZsub<-rbind(REZsub,tempx)
     plot(0,1,ylim=c(-10,120),xlim=c(0,30),col=couleur,
          main=names(table(subdat$strain_ID))[i])
-  } else {
+  } else { tryCatch({
     temp.m1<-drm(perc_croiss~dose,
                  data=datatemp,
                  fct=LL.4())
@@ -102,10 +111,17 @@ for (i in 1: dim(table(subdat$strain_ID))[1]) {
          lty=typeline,main=names(table(subdat$strain_ID))[i])
     plot(temp.m1,ylim=c(-10,120),xlim=c(0,30),col=couleur,
          lty=typeline,type="confidence",add=TRUE)
-    temp<-ED(temp.m1,50,type="absolute")
-    tempx<-data.frame("strain_ID"=names(table(subdat$strain_ID))[i],
-                      "ED50"=as.character(temp[1]))
+  },error=function(e){cat("ERROR :",conditionMessage(e), "\n")})
+    if (!exists("temp.m1")){
+      tempx<-data.frame("strain_ID"=names(table(subdat$strain_ID))[i],
+                        "ED50"="ERROR")
+    } else {
+      temp<-ED(temp.m1,50,type="absolute")
+      tempx<-data.frame("strain_ID"=names(table(subdat$strain_ID))[i],
+                        "ED50"=as.character(temp[1]))
+    }
     REZsub<-rbind(REZsub,tempx)
+    rm(temp.m1)
   }
 }
 par(op)
@@ -114,7 +130,6 @@ dev.off()
 REZ_VeMyDife<-data.frame(REZsub[sort(REZsub$strain_ID),],
                          "TestType"="Mycelium",
                          "SubsAct"="difenoconazole")
-
 
 
 ####dodine
@@ -138,13 +153,14 @@ for (i in 1: dim(table(subdat$strain_ID))[1]) {
   datatemp<-subdat[subdat$strain_ID==names(table(subdat$strain_ID))[i],]
   couleur<-collist[as.numeric(datatemp$strain_type)]
   typeline<-as.numeric(datatemp$species)[1]
+  print(as.character(datatemp$strain_ID[1]))
   if (is.na(datatemp[1,"perc_croiss"])==TRUE) {
     tempx<-data.frame("strain_ID"=names(table(subdat$strain_ID))[i],
                       "ED50"=c("NA"))
     REZsub<-rbind(REZsub,tempx)
     plot(0,1,ylim=c(-10,120),xlim=c(0,30),col=couleur,
          main=names(table(subdat$strain_ID))[i])
-  } else {
+  } else { tryCatch({
     temp.m1<-drm(perc_croiss~dose,
                  data=datatemp,
                  fct=LL.4())
@@ -152,10 +168,17 @@ for (i in 1: dim(table(subdat$strain_ID))[1]) {
          lty=typeline,main=names(table(subdat$strain_ID))[i])
     plot(temp.m1,ylim=c(-10,120),xlim=c(0,30),col=couleur,
          lty=typeline,type="confidence",add=TRUE)
-    temp<-ED(temp.m1,50,type="absolute")
-    tempx<-data.frame("strain_ID"=names(table(subdat$strain_ID))[i],
-                      "ED50"=as.character(temp[1]))
+  },error=function(e){cat("ERROR :",conditionMessage(e), "\n")})
+    if (!exists("temp.m1")){
+      tempx<-data.frame("strain_ID"=names(table(subdat$strain_ID))[i],
+                        "ED50"="ERROR")
+    } else {
+      temp<-ED(temp.m1,50,type="absolute")
+      tempx<-data.frame("strain_ID"=names(table(subdat$strain_ID))[i],
+                        "ED50"=as.character(temp[1]))
+    }
     REZsub<-rbind(REZsub,tempx)
+    rm(temp.m1)
   }
 }
 par(op)
@@ -164,7 +187,6 @@ dev.off()
 REZ_VeMyDodi<-data.frame(REZsub[sort(REZsub$strain_ID),],
                          "TestType"="Mycelium",
                          "SubsAct"="dodine")
-
 
 
 ####trifloxystrobine
@@ -188,13 +210,14 @@ for (i in 1: dim(table(subdat$strain_ID))[1]) {
   datatemp<-subdat[subdat$strain_ID==names(table(subdat$strain_ID))[i],]
   couleur<-collist[as.numeric(datatemp$strain_type)]
   typeline<-as.numeric(datatemp$species)[1]
+  print(as.character(datatemp$strain_ID[1]))
   if (is.na(datatemp[1,"perc_croiss"])==TRUE) {
     tempx<-data.frame("strain_ID"=names(table(subdat$strain_ID))[i],
                       "ED50"=c("NA"))
     REZsub<-rbind(REZsub,tempx)
     plot(0,1,ylim=c(-10,120),xlim=c(0,30),col=couleur,
          main=names(table(subdat$strain_ID))[i])
-  } else {
+  } else { tryCatch({
     temp.m1<-drm(perc_croiss~dose,
                  data=datatemp,
                  fct=LL.4())
@@ -202,10 +225,17 @@ for (i in 1: dim(table(subdat$strain_ID))[1]) {
          lty=typeline,main=names(table(subdat$strain_ID))[i])
     plot(temp.m1,ylim=c(-10,120),xlim=c(0,30),col=couleur,
          lty=typeline,type="confidence",add=TRUE)
-    temp<-ED(temp.m1,50,type="absolute")
-    tempx<-data.frame("strain_ID"=names(table(subdat$strain_ID))[i],
-                      "ED50"=as.character(temp[1]))
+  },error=function(e){cat("ERROR :",conditionMessage(e), "\n")})
+    if (!exists("temp.m1")){
+      tempx<-data.frame("strain_ID"=names(table(subdat$strain_ID))[i],
+                        "ED50"="ERROR")
+    } else {
+      temp<-ED(temp.m1,50,type="absolute")
+      tempx<-data.frame("strain_ID"=names(table(subdat$strain_ID))[i],
+                        "ED50"=as.character(temp[1]))
+    }
     REZsub<-rbind(REZsub,tempx)
+    rm(temp.m1)
   }
 }
 par(op)
@@ -214,3 +244,11 @@ dev.off()
 REZ_VeMyTrif<-data.frame(REZsub[sort(REZsub$strain_ID),],
                          "TestType"="Mycelium",
                          "SubsAct"="trifloxystrobine")
+
+#concatenating the different result files
+REZ_VeMy<-cbind
+
+
+###############################################################################
+#END
+###############################################################################
