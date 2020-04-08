@@ -1,8 +1,8 @@
-###############################################################################
-###############################################################################
+##############################################################################/
+##############################################################################/
 #Analysis for Alternaria sp by mycelial growth bioassay
-###############################################################################
-###############################################################################
+##############################################################################/
+##############################################################################/
 
 source("creative_load_data.R")
 
@@ -11,19 +11,22 @@ AlterMyc.dat<-creadat[creadat$species=="Alternaria sp.",]
 AlterMyc.dat<-AlterMyc.dat[AlterMyc.dat$test_type=="mycelial_growth",]
 AlterMyc.dat$species<-factor(AlterMyc.dat$species,
                              levels=rev(levels(AlterMyc.dat$species)))
+#removing missing data
+AlterMyc.dat<-AlterMyc.dat[!is.na(AlterMyc.dat$perc_croiss),]
 AlterMyc.dat<-drop.levels(AlterMyc.dat,reorder=FALSE)
 #AlterMyc.dat<-AlterMyc.dat[!is.na(AlterMyc.dat$perc_croiss),]
 
 collist<-c("forestgreen","black")
 
 
-####boscalild
+####boscalild####
 subdat<-AlterMyc.dat[AlterMyc.dat$active_substance=="boscalid",]
 #some individual never reach an inhibition of 50%, event for the highest 
 #tested concentration. 
 subdat_rez<-as.character(subdat[subdat$dose=="30" & subdat$perc_croiss>50,
                                 "strain_ID"])
 subdat_rez<-subdat_rez[!(is.na(subdat_rez))]
+subdat_rez<-names(table(subdat_rez))
 ifelse(length(subdat_rez)==0,
        REZsub<-data.frame("strain_ID"=as.character(),"ED50"=as.character()),
        REZsub<-data.frame("strain_ID"=subdat_rez,
@@ -74,13 +77,14 @@ REZ_AlMyBosc<-data.frame(REZsub[sort(REZsub$strain_ID),],
                          "SubsAct"="boscalid")
 
 
-####captane
+####captane####
 subdat<-AlterMyc.dat[AlterMyc.dat$active_substance=="captane",]
 #some individual never reach an inhibition of 50%, event for the highest 
 #tested concentration. 
 subdat_rez<-as.character(subdat[subdat$dose=="30" & subdat$perc_croiss>50,
                                 "strain_ID"])
 subdat_rez<-subdat_rez[!(is.na(subdat_rez))]
+subdat_rez<-names(table(subdat_rez))
 ifelse(length(subdat_rez)==0,
        REZsub<-data.frame("strain_ID"=as.character(),"ED50"=as.character()),
        REZsub<-data.frame("strain_ID"=subdat_rez,
@@ -132,13 +136,14 @@ REZ_AlMyCapt<-data.frame(REZsub[sort(REZsub$strain_ID),],
 
 
 
-####carbendazim
+####carbendazim####
 subdat<-AlterMyc.dat[AlterMyc.dat$active_substance=="carbendazim",]
 #some individual never reach an inhibition of 50%, event for the highest 
 #tested concentration. 
 subdat_rez<-as.character(subdat[subdat$dose=="30" & subdat$perc_croiss>50,
                                 "strain_ID"])
 subdat_rez<-subdat_rez[!(is.na(subdat_rez))]
+subdat_rez<-names(table(subdat_rez))
 ifelse(length(subdat_rez)==0,
        REZsub<-data.frame("strain_ID"=as.character(),"ED50"=as.character()),
        REZsub<-data.frame("strain_ID"=subdat_rez,
@@ -190,13 +195,14 @@ REZ_AlMyCarb<-data.frame(REZsub[sort(REZsub$strain_ID),],
 
 
 
-####cyprodinil
+####cyprodinil####
 subdat<-AlterMyc.dat[AlterMyc.dat$active_substance=="cyprodinil",]
 #some individual never reach an inhibition of 50%, event for the highest 
 #tested concentration. 
 subdat_rez<-as.character(subdat[subdat$dose=="30" & subdat$perc_croiss>50,
                                 "strain_ID"])
 subdat_rez<-subdat_rez[!(is.na(subdat_rez))]
+subdat_rez<-names(table(subdat_rez))
 ifelse(length(subdat_rez)==0,
        REZsub<-data.frame("strain_ID"=as.character(),"ED50"=as.character()),
        REZsub<-data.frame("strain_ID"=subdat_rez,
@@ -248,13 +254,14 @@ REZ_AlMyCypr<-data.frame(REZsub[sort(REZsub$strain_ID),],
 
 
 
-####difenoconazole
+####difenoconazole####
 subdat<-AlterMyc.dat[AlterMyc.dat$active_substance=="difenoconazole",]
 #some individual never reach an inhibition of 50%, event for the highest 
 #tested concentration. 
 subdat_rez<-as.character(subdat[subdat$dose=="30" & subdat$perc_croiss>50,
                                 "strain_ID"])
 subdat_rez<-subdat_rez[!(is.na(subdat_rez))]
+subdat_rez<-names(table(subdat_rez))
 ifelse(length(subdat_rez)==0,
        REZsub<-data.frame("strain_ID"=as.character(),"ED50"=as.character()),
        REZsub<-data.frame("strain_ID"=subdat_rez,
@@ -306,13 +313,14 @@ REZ_AlMyDife<-data.frame(REZsub[sort(REZsub$strain_ID),],
 
 
 
-####dithianon
+####dithianon####
 subdat<-AlterMyc.dat[AlterMyc.dat$active_substance=="dithianon",]
 #some individual never reach an inhibition of 50%, event for the highest 
 #tested concentration. 
 subdat_rez<-as.character(subdat[subdat$dose=="30" & subdat$perc_croiss>50,
                                 "strain_ID"])
 subdat_rez<-subdat_rez[!(is.na(subdat_rez))]
+subdat_rez<-names(table(subdat_rez))
 ifelse(length(subdat_rez)==0,
        REZsub<-data.frame("strain_ID"=as.character(),"ED50"=as.character()),
        REZsub<-data.frame("strain_ID"=subdat_rez,
@@ -363,13 +371,14 @@ REZ_AlMyDith<-data.frame(REZsub[sort(REZsub$strain_ID),],
                          "SubsAct"="dithianon")
 
 
-####dodine
+####dodine####
 subdat<-AlterMyc.dat[AlterMyc.dat$active_substance=="dodine",]
 #some individual never reach an inhibition of 50%, event for the highest 
 #tested concentration. 
 subdat_rez<-as.character(subdat[subdat$dose=="30" & subdat$perc_croiss>50,
                                 "strain_ID"])
 subdat_rez<-subdat_rez[!(is.na(subdat_rez))]
+subdat_rez<-names(table(subdat_rez))
 ifelse(length(subdat_rez)==0,
        REZsub<-data.frame("strain_ID"=as.character(),"ED50"=as.character()),
        REZsub<-data.frame("strain_ID"=subdat_rez,
@@ -421,13 +430,14 @@ REZ_AlMyDodi<-data.frame(REZsub[sort(REZsub$strain_ID),],
 
 
 
-####fluopyram
+####fluopyram####
 subdat<-AlterMyc.dat[AlterMyc.dat$active_substance=="fluopyram",]
 #some individual never reach an inhibition of 50%, event for the highest 
 #tested concentration. 
 subdat_rez<-as.character(subdat[subdat$dose=="30" & subdat$perc_croiss>50,
                                 "strain_ID"])
 subdat_rez<-subdat_rez[!(is.na(subdat_rez))]
+subdat_rez<-names(table(subdat_rez))
 ifelse(length(subdat_rez)==0,
        REZsub<-data.frame("strain_ID"=as.character(),"ED50"=as.character()),
        REZsub<-data.frame("strain_ID"=subdat_rez,
@@ -479,13 +489,14 @@ REZ_AlMyFluop<-data.frame(REZsub[sort(REZsub$strain_ID),],
 
 
 
-####trifloxystrobine
+####trifloxystrobine####
 subdat<-AlterMyc.dat[AlterMyc.dat$active_substance=="trifloxystrobine",]
 #some individual never reach an inhibition of 50%, event for the highest 
 #tested concentration. 
 subdat_rez<-as.character(subdat[subdat$dose=="30" & subdat$perc_croiss>50,
                                 "strain_ID"])
 subdat_rez<-subdat_rez[!(is.na(subdat_rez))]
+subdat_rez<-names(table(subdat_rez))
 ifelse(length(subdat_rez)==0,
        REZsub<-data.frame("strain_ID"=as.character(),"ED50"=as.character()),
        REZsub<-data.frame("strain_ID"=subdat_rez,
@@ -544,6 +555,6 @@ write.table(REZ_AlMy,file="output/Alternaria_mycelial.txt",quote=FALSE,
             col.names=TRUE,row.names=FALSE,sep="\t")
 
 
-###############################################################################
+##############################################################################/
 #END
-###############################################################################
+##############################################################################/

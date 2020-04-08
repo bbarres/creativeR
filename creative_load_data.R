@@ -10,7 +10,8 @@ library(plotrix)
 library(gdata)
 
 #load the global dataset
-creadat<-read.table(file="data/creative_data.txt",header=T,sep="\t")
+#creadat<-read.table(file="data/creative_data.txt",header=T,sep="\t")
+creadat<-read.table(file="data/creative_data1.txt",header=T,sep="\t")
 creadat$species<-factor(creadat$species,levels=rev(levels(creadat$species)))
 collist<-c("forestgreen","black")
 
