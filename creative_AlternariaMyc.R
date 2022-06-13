@@ -11,6 +11,11 @@ AlterMyc.dat<-creadat[creadat$species=="Alternaria sp.",]
 AlterMyc.dat<-AlterMyc.dat[AlterMyc.dat$test_type=="mycelial_growth",]
 AlterMyc.dat$species<-factor(AlterMyc.dat$species,
                              levels=rev(levels(AlterMyc.dat$species)))
+
+#temporary data set loading waiting for the true final data set
+AlterMyc.dat<-read.table(file="data/alternaria_final.txt",header=T,
+                         sep="\t",stringsAsFactors=TRUE)
+
 #removing missing data
 AlterMyc.dat<-AlterMyc.dat[!is.na(AlterMyc.dat$perc_croiss),]
 AlterMyc.dat<-drop.levels(AlterMyc.dat,reorder=FALSE)
@@ -19,11 +24,15 @@ AlterMyc.dat<-drop.levels(AlterMyc.dat,reorder=FALSE)
 collist<-c("forestgreen","black")
 
 
+REZ_AlMyBosc<-data.frame("strain_ID"=as.character(),"ActiveSub"=as.character,
+                         "method"=as.character(),"ED50"=as.character())
+
 ####boscalild####
 subdat<-AlterMyc.dat[AlterMyc.dat$active_substance=="boscalid",]
 #some individual never reach an inhibition of 50%, event for the highest 
 #tested concentration. 
-subdat_rez<-as.character(subdat[subdat$dose=="30" & subdat$perc_croiss>50,
+subdat_rez<-as.character(subdat[subdat$dose==max(subdat$dose) & 
+                                  subdat$perc_croiss>50,
                                 "strain_ID"])
 subdat_rez<-subdat_rez[!(is.na(subdat_rez))]
 subdat_rez<-names(table(subdat_rez))
@@ -53,15 +62,17 @@ for (i in 1: dim(table(subdat$strain_ID))[1]) {
                  data=datatemp,
                  fct=LL.4())
     plot(temp.m1,ylim=c(-10,120),xlim=c(0,30),col=couleur,
-         lty=typeline,main=names(table(subdat$strain_ID))[i])
+         lty=typeline,type="confidence",main=names(table(subdat$strain_ID))[i])
+    plot(temp.m1,ylim=c(-10,120),xlim=c(0,30),col="red",
+         pch=4,type="obs",add=TRUE)
     plot(temp.m1,ylim=c(-10,120),xlim=c(0,30),col=couleur,
-         lty=typeline,type="confidence",add=TRUE)
+         lty=typeline,pch=19,add=TRUE)
   },error=function(e){cat("ERROR :",conditionMessage(e), "\n")})
     if (!exists("temp.m1")){
       tempx<-data.frame("strain_ID"=names(table(subdat$strain_ID))[i],
                         "ED50"="ERROR")
     } else {
-      temp<-ED(temp.m1,50,type="absolute")
+      temp<-ED(temp.m1,50,type="absolute",interval="delta")
       tempx<-data.frame("strain_ID"=names(table(subdat$strain_ID))[i],
                         "ED50"=as.character(temp[1]))
     }
