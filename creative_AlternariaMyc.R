@@ -75,6 +75,9 @@ for (i in 1: dim(table(subdat$strain_ID))[1]) {
       temp<-ED(temp.m1,50,type="absolute",interval="delta")
       tempx<-data.frame("strain_ID"=names(table(subdat$strain_ID))[i],
                         "ED50"=as.character(temp[1]))
+      temppara<-summary(temp.m1)$coefficients[,1]
+      tempSE<-summary(temp.m1)$coefficients[,2]
+      temppval<-summary(temp.m1)$coefficients[,4]
     }
     REZsub<-rbind(REZsub,tempx)
     rm(temp.m1)
