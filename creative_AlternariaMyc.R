@@ -28,7 +28,7 @@ collist<-c("forestgreen","black")
 #Analysis for Alternaria sp by mycelial growth bioassay
 ##############################################################################/
 
-REZ_AlterMy<-data.frame("strain_ID"=as.character(),"ActiveSub"=as.character,
+REZ_AlterMy<-data.frame("strain_ID"=as.character(),"ActiveSub"=as.character(),
                         "method"=as.character(),"ED50-abs"=as.numeric(),
                         "ED50-SE"=as.numeric(),"ED50-lower"=as.numeric(),
                         "ED50-upper"=as.numeric(),"b-param"=as.numeric(),
@@ -81,58 +81,104 @@ for (j in 1: length(levels(AlterMyc.dat$active_substance))) {
   
   #we limit the dataset to the sample that reach somehow a IC of 50%
   subdat<-subdat[!(subdat$strain_ID %in% subdat_rez),]
-  
   subdat<-drop.levels(subdat,reorder=FALSE)
-  pdf(file="output/AlMyboscalid.pdf",width=12,height=30)
-  op<-par(mfrow=c(10,4))
-  for (i in 1: dim(table(subdat$strain_ID))[1]) {
-    datatemp<-subdat[subdat$strain_ID==names(table(subdat$strain_ID))[i],]
-    couleur<-collist[as.numeric(datatemp$strain_type)]
-    typeline<-as.numeric(datatemp$species)[1]
-    print(as.character(datatemp$strain_ID[1]))
-    if (is.na(datatemp[1,"perc_croiss"])==TRUE) {
-      tempx<-data.frame("strain_ID"=names(table(subdat$strain_ID))[i],
-                        "ED50"=c("NA"))
-      REZsub<-rbind(REZsub,tempx)
-      plot(0,1,ylim=c(-10,120),xlim=c(0,30),col=couleur,
-           main=names(table(subdat$strain_ID))[i])
-    } else { tryCatch({
-      temp.m1<-drm(perc_croiss~dose,
-                   data=datatemp,
-                   fct=LL.4())
-      plot(temp.m1,ylim=c(-10,120),xlim=c(0,30),col=couleur,
-           lty=typeline,type="confidence",main=names(table(subdat$strain_ID))[i])
-      plot(temp.m1,ylim=c(-10,120),xlim=c(0,30),col="red",
-           pch=4,type="obs",add=TRUE)
-      plot(temp.m1,ylim=c(-10,120),xlim=c(0,30),col=couleur,
-           lty=typeline,pch=19,add=TRUE)
-    },error=function(e){cat("ERROR :",conditionMessage(e), "\n")})
-      if (!exists("temp.m1")){
+  #the subsequent analyses are unnecessary if all the strains are >maxdose
+  if(dim(subdat)[1]==0) {
+    REZ_AlterMy<-rbind(REZ_AlterMy,REZsub)
+  } else {
+    pdf(file=paste("output/AltMy",tempAS,".pdf",sep=""),
+        width=12,height=30)
+    op<-par(mfrow=c(10,4))
+    for (i in 1: dim(table(subdat$strain_ID))[1]) {
+      datatemp<-subdat[subdat$strain_ID==names(table(subdat$strain_ID))[i],]
+      couleur<-collist[as.numeric(datatemp$strain_type)]
+      typeline<-as.numeric(datatemp$species)[1]
+      print(as.character(datatemp$strain_ID[1]))
+      if (is.na(datatemp[1,"perc_croiss"])==TRUE) {
         tempx<-data.frame("strain_ID"=names(table(subdat$strain_ID))[i],
-                          "ED50"="ERROR")
-      } else {
-        temp<-ED(temp.m1,50,type="absolute",interval="delta")
-        tempx<-data.frame("strain_ID"=names(table(subdat$strain_ID))[i],
-                          "ED50"=as.character(temp[1]))
-        tempb<-summary(temp.m1)$coefficients[1,]
-        tempc<-summary(temp.m1)$coefficients[2,]
-        tempd<-summary(temp.m1)$coefficients[3,]
-        tempd<-summary(temp.m1)$coefficients[4,]
+                          "ActiveSub"=tempAS,
+                          "method"=levels(subdat$test_type),
+                          "ED50-abs"=NA,
+                          "ED50-SE"=NA,"ED50-lower"=NA,
+                          "ED50-upper"=NA,"b-param"=NA,
+                          "b-SE"=NA,"b-tval"=NA,
+                          "b-pval"=NA,"c-param"=NA,
+                          "c-SE"=NA,"c-tval"=NA,
+                          "c-pval"=NA,"d-param"=NA,
+                          "d-SE"=NA,"d-tval"=NA,
+                          "d-pval"=NA,"e-param"=NA,
+                          "e-SE"=NA,"e-tval"=NA,
+                          "e-pval"=NA)
+        REZsub<-rbind(REZsub,tempx)
+        plot(0,1,ylim=c(-10,120),xlim=c(0,30),col=couleur,
+             main=names(table(subdat$strain_ID))[i])
+      } else { tryCatch({
+        temp.m1<-drm(perc_croiss~dose,
+                     data=datatemp,
+                     fct=LL.4())
+        plot(temp.m1,ylim=c(-10,120),xlim=c(0,30),col=couleur,
+             lty=typeline,type="confidence",main=names(table(subdat$strain_ID))[i])
+        plot(temp.m1,ylim=c(-10,120),xlim=c(0,30),col="red",
+             pch=4,type="obs",add=TRUE)
+        plot(temp.m1,ylim=c(-10,120),xlim=c(0,30),col=couleur,
+             lty=typeline,pch=19,add=TRUE)
+      },error=function(e){cat("ERROR :",conditionMessage(e), "\n")})
+        if (!exists("temp.m1")){
+          tempx<-data.frame("strain_ID"=names(table(subdat$strain_ID))[i],
+                            "ActiveSub"=tempAS,
+                            "method"=levels(subdat$test_type),
+                            "ED50-abs"="ERROR",
+                            "ED50-SE"=NA,"ED50-lower"=NA,
+                            "ED50-upper"=NA,"b-param"=NA,
+                            "b-SE"=NA,"b-tval"=NA,
+                            "b-pval"=NA,"c-param"=NA,
+                            "c-SE"=NA,"c-tval"=NA,
+                            "c-pval"=NA,"d-param"=NA,
+                            "d-SE"=NA,"d-tval"=NA,
+                            "d-pval"=NA,"e-param"=NA,
+                            "e-SE"=NA,"e-tval"=NA,
+                            "e-pval"=NA)
+        } else {
+          temp<-ED(temp.m1,50,type="absolute",interval="delta")
+          tempb<-summary(temp.m1)$coefficients[1,]
+          tempc<-summary(temp.m1)$coefficients[2,]
+          tempd<-summary(temp.m1)$coefficients[3,]
+          tempe<-summary(temp.m1)$coefficients[4,]
+          tempx<-data.frame("strain_ID"=names(table(subdat$strain_ID))[i],
+                            "ActiveSub"=tempAS,
+                            "method"=levels(subdat$test_type),
+                            "ED50-abs"=temp[1],
+                            "ED50-SE"=temp[2],"ED50-lower"=temp[3],
+                            "ED50-upper"=temp[4],"b-param"=tempb[1],
+                            "b-SE"=tempb[2],"b-tval"=tempb[3],
+                            "b-pval"=tempb[4],"c-param"=tempc[1],
+                            "c-SE"=tempc[2],"c-tval"=tempc[3],
+                            "c-pval"=tempc[4],"d-param"=tempd[1],
+                            "d-SE"=tempd[2],"d-tval"=tempd[3],
+                            "d-pval"=tempd[4],"e-param"=tempe[1],
+                            "e-SE"=tempe[2],"e-tval"=tempe[3],
+                            "e-pval"=tempe[4])
+        }
+        REZsub<-rbind(REZsub,tempx)
+        rm(temp.m1)
       }
-      REZsub<-rbind(REZsub,tempx)
-      rm(temp.m1)
+      
     }
+    par(op)
+    dev.off()
+    
+    REZ_AlterMy<-rbind(REZ_AlterMy,REZsub)
   }
-  par(op)
-  dev.off()
-  
-  REZ_AlMyBosc<-data.frame(REZsub[sort(REZsub$strain_ID),],
-                           "TestType"="Mycelium",
-                           "SubsAct"="boscalid")
   
 }
-  
 
+write.table(REZ_AlterMy,file="output/Alternaria_mycelial.txt",quote=FALSE,
+            col.names=TRUE,row.names=FALSE,sep="\t")
+
+
+##############################################################################/
+#END
+##############################################################################/
 
 
 ####captane####
