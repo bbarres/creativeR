@@ -24,8 +24,175 @@ AlterMyc.dat<-drop.levels(AlterMyc.dat,reorder=FALSE)
 collist<-c("forestgreen","black")
 
 
-REZ_AlMyBosc<-data.frame("strain_ID"=as.character(),"ActiveSub"=as.character,
-                         "method"=as.character(),"ED50"=as.character())
+##############################################################################/
+#Analysis for Alternaria sp by mycelial growth bioassay
+##############################################################################/
+
+REZ_AlterMy<-data.frame("strain_ID"=as.character(),"ActiveSub"=as.character,
+                        "method"=as.character(),"ED50-abs"=as.numeric(),
+                        "ED50-SE"=as.numeric(),"ED50-lower"=as.numeric(),
+                        "ED50-upper"=as.numeric(),"b-param"=as.numeric(),
+                        "b-SE"=as.numeric(),"b-tval"=as.numeric(),
+                        "b-pval"=as.numeric(),"c-param"=as.numeric(),
+                        "c-SE"=as.numeric(),"c-tval"=as.numeric(),
+                        "c-pval"=as.numeric(),"d-param"=as.numeric(),
+                        "d-SE"=as.numeric(),"d-tval"=as.numeric(),
+                        "d-pval"=as.numeric(),"e-param"=as.numeric(),
+                        "e-SE"=as.numeric(),"e-tval"=as.numeric(),
+                        "e-pval"=as.numeric())
+
+for (j in 1: length(levels(AlterMyc.dat$active_substance))) {
+  
+  tempAS<-levels(AlterMyc.dat$active_substance)[j]
+  subdat<-AlterMyc.dat[AlterMyc.dat$active_substance==tempAS,]
+  #some individual never reach an inhibition of 50%, event for the highest 
+  #tested concentration. 
+  subdat_rez<-as.character(subdat[subdat$dose==max(subdat$dose) & 
+                                    subdat$perc_croiss>50,
+                                  "strain_ID"])
+  subdat_rez<-subdat_rez[!(is.na(subdat_rez))]
+  subdat_rez<-names(table(subdat_rez))
+  ifelse(length(subdat_rez)==0,
+         REZsub<-data.frame("strain_ID"=as.character(),"ActiveSub"=as.character(),
+                            "method"=as.character(),"ED50-abs"=as.numeric(),
+                            "ED50-SE"=as.numeric(),"ED50-lower"=as.numeric(),
+                            "ED50-upper"=as.numeric(),"b-param"=as.numeric(),
+                            "b-SE"=as.numeric(),"b-tval"=as.numeric(),
+                            "b-pval"=as.numeric(),"c-param"=as.numeric(),
+                            "c-SE"=as.numeric(),"c-tval"=as.numeric(),
+                            "c-pval"=as.numeric(),"d-param"=as.numeric(),
+                            "d-SE"=as.numeric(),"d-tval"=as.numeric(),
+                            "d-pval"=as.numeric(),"e-param"=as.numeric(),
+                            "e-SE"=as.numeric(),"e-tval"=as.numeric(),
+                            "e-pval"=as.numeric()),
+         REZsub<-data.frame("strain_ID"=subdat_rez,"ActiveSub"=tempAS,
+                            "method"=levels(subdat$test_type),
+                            "ED50-abs"=paste(">",max(subdat$dose),sep=""),
+                            "ED50-SE"=NA,"ED50-lower"=NA,
+                            "ED50-upper"=NA,"b-param"=NA,
+                            "b-SE"=NA,"b-tval"=NA,
+                            "b-pval"=NA,"c-param"=NA,
+                            "c-SE"=NA,"c-tval"=NA,
+                            "c-pval"=NA,"d-param"=NA,
+                            "d-SE"=NA,"d-tval"=NA,
+                            "d-pval"=NA,"e-param"=NA,
+                            "e-SE"=NA,"e-tval"=NA,
+                            "e-pval"=NA))
+  
+  #we limit the dataset to the sample that reach somehow a IC of 50%
+  subdat<-subdat[!(subdat$strain_ID %in% subdat_rez),]
+  
+  subdat<-drop.levels(subdat,reorder=FALSE)
+  pdf(file="output/AlMyboscalid.pdf",width=12,height=30)
+  op<-par(mfrow=c(10,4))
+  for (i in 1: dim(table(subdat$strain_ID))[1]) {
+    datatemp<-subdat[subdat$strain_ID==names(table(subdat$strain_ID))[i],]
+    couleur<-collist[as.numeric(datatemp$strain_type)]
+    typeline<-as.numeric(datatemp$species)[1]
+    print(as.character(datatemp$strain_ID[1]))
+    if (is.na(datatemp[1,"perc_croiss"])==TRUE) {
+      tempx<-data.frame("strain_ID"=names(table(subdat$strain_ID))[i],
+                        "ED50"=c("NA"))
+      REZsub<-rbind(REZsub,tempx)
+      plot(0,1,ylim=c(-10,120),xlim=c(0,30),col=couleur,
+           main=names(table(subdat$strain_ID))[i])
+    } else { tryCatch({
+      temp.m1<-drm(perc_croiss~dose,
+                   data=datatemp,
+                   fct=LL.4())
+      plot(temp.m1,ylim=c(-10,120),xlim=c(0,30),col=couleur,
+           lty=typeline,type="confidence",main=names(table(subdat$strain_ID))[i])
+      plot(temp.m1,ylim=c(-10,120),xlim=c(0,30),col="red",
+           pch=4,type="obs",add=TRUE)
+      plot(temp.m1,ylim=c(-10,120),xlim=c(0,30),col=couleur,
+           lty=typeline,pch=19,add=TRUE)
+    },error=function(e){cat("ERROR :",conditionMessage(e), "\n")})
+      if (!exists("temp.m1")){
+        tempx<-data.frame("strain_ID"=names(table(subdat$strain_ID))[i],
+                          "ED50"="ERROR")
+      } else {
+        temp<-ED(temp.m1,50,type="absolute",interval="delta")
+        tempx<-data.frame("strain_ID"=names(table(subdat$strain_ID))[i],
+                          "ED50"=as.character(temp[1]))
+        tempb<-summary(temp.m1)$coefficients[1,]
+        tempc<-summary(temp.m1)$coefficients[2,]
+        tempd<-summary(temp.m1)$coefficients[3,]
+        tempd<-summary(temp.m1)$coefficients[4,]
+      }
+      REZsub<-rbind(REZsub,tempx)
+      rm(temp.m1)
+    }
+  }
+  par(op)
+  dev.off()
+  
+  REZ_AlMyBosc<-data.frame(REZsub[sort(REZsub$strain_ID),],
+                           "TestType"="Mycelium",
+                           "SubsAct"="boscalid")
+  
+}
+  
+
+
+
+####captane####
+subdat<-AlterMyc.dat[AlterMyc.dat$active_substance=="captane",]
+#some individual never reach an inhibition of 50%, event for the highest 
+#tested concentration. 
+subdat_rez<-as.character(subdat[subdat$dose=="30" & subdat$perc_croiss>50,
+                                "strain_ID"])
+subdat_rez<-subdat_rez[!(is.na(subdat_rez))]
+subdat_rez<-names(table(subdat_rez))
+ifelse(length(subdat_rez)==0,
+       REZsub<-data.frame("strain_ID"=as.character(),"ED50"=as.character()),
+       REZsub<-data.frame("strain_ID"=subdat_rez,
+                          "ED50"=paste(">",max(subdat$dose),sep="")))
+#we limit the dataset to the sample that reach somehow a IC of 50%
+subdat<-subdat[!(subdat$strain_ID %in% subdat_rez),]
+
+subdat<-drop.levels(subdat,reorder=FALSE)
+pdf(file="output/AlMycaptane.pdf",width=12,height=30)
+op<-par(mfrow=c(10,4))
+for (i in 1: dim(table(subdat$strain_ID))[1]) {
+  datatemp<-subdat[subdat$strain_ID==names(table(subdat$strain_ID))[i],]
+  couleur<-collist[as.numeric(datatemp$strain_type)]
+  typeline<-as.numeric(datatemp$species)[1]
+  print(as.character(datatemp$strain_ID[1]))
+  if (is.na(datatemp[1,"perc_croiss"])==TRUE) {
+    tempx<-data.frame("strain_ID"=names(table(subdat$strain_ID))[i],
+                      "ED50"=c("NA"))
+    REZsub<-rbind(REZsub,tempx)
+    plot(0,1,ylim=c(-10,120),xlim=c(0,30),col=couleur,
+         main=names(table(subdat$strain_ID))[i])
+  } else { tryCatch({
+    temp.m1<-drm(perc_croiss~dose,
+                 data=datatemp,
+                 fct=LL.4())
+    plot(temp.m1,ylim=c(-10,120),xlim=c(0,30),col=couleur,
+         lty=typeline,main=names(table(subdat$strain_ID))[i])
+    plot(temp.m1,ylim=c(-10,120),xlim=c(0,30),col=couleur,
+         lty=typeline,type="confidence",add=TRUE)
+  },error=function(e){cat("ERROR :",conditionMessage(e), "\n")})
+    if (!exists("temp.m1")){
+      tempx<-data.frame("strain_ID"=names(table(subdat$strain_ID))[i],
+                        "ED50"="ERROR")
+    } else {
+      temp<-ED(temp.m1,50,type="absolute")
+      tempx<-data.frame("strain_ID"=names(table(subdat$strain_ID))[i],
+                        "ED50"=as.character(temp[1]))
+    }
+    REZsub<-rbind(REZsub,tempx)
+    rm(temp.m1)
+  }
+}
+par(op)
+dev.off()
+
+REZ_AlMyCapt<-data.frame(REZsub[sort(REZsub$strain_ID),],
+                         "TestType"="Mycelium",
+                         "SubsAct"="captane")
+
+
 
 ####boscalild####
 subdat<-AlterMyc.dat[AlterMyc.dat$active_substance=="boscalid",]
@@ -75,9 +242,10 @@ for (i in 1: dim(table(subdat$strain_ID))[1]) {
       temp<-ED(temp.m1,50,type="absolute",interval="delta")
       tempx<-data.frame("strain_ID"=names(table(subdat$strain_ID))[i],
                         "ED50"=as.character(temp[1]))
-      temppara<-summary(temp.m1)$coefficients[,1]
-      tempSE<-summary(temp.m1)$coefficients[,2]
-      temppval<-summary(temp.m1)$coefficients[,4]
+      tempb<-summary(temp.m1)$coefficients[1,]
+      tempc<-summary(temp.m1)$coefficients[2,]
+      tempd<-summary(temp.m1)$coefficients[3,]
+      tempd<-summary(temp.m1)$coefficients[4,]
     }
     REZsub<-rbind(REZsub,tempx)
     rm(temp.m1)
