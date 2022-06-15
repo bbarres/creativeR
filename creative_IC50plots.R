@@ -9,8 +9,8 @@ source("recif_load.R")
 
 #in order for this code to work, you need first to run the script for 
 #IC50 estimation
-datamyc2<-read.table("data/CRMYC_270821.txt",header=TRUE,
-                     sep=";",stringsAsFactors=TRUE)
+alterCI50<-read.table("output/Alternaria_mycelial.txt",header=TRUE,
+                      sep="\t",stringsAsFactors=TRUE)
 
 
 ##############################################################################/
@@ -21,22 +21,19 @@ datamyc2<-read.table("data/CRMYC_270821.txt",header=TRUE,
 #first, we replace the ED50 that were too high to be evaluated with an 
 #arbitrary value
 cooloor<- brewer.pal(12,"Set3")
-CompRez$ED50<-as.character(CompRez$ED50)
-CompRez[CompRez$ED50==">10","ED50"]<-12
-CompRez[CompRez$ED50==">20","ED50"]<-22
-CompRez[CompRez$ED50==">50","ED50"]<-52
-CompRez$ED50<-as.numeric(as.character(CompRez$ED50))
+alterCI50$ED50.abs<-as.character(alterCI50$ED50.abs)
+alterCI50[alterCI50$ED50.abs==">30","ED50.abs"]<-32
+alterCI50$ED50.abs<-as.numeric(as.character(alterCI50$ED50.abs))
 
 pdf(file="output/histo_AllInd_ASA.pdf",width=60,height=8)
 op<-par(mfrow=c(1,1))
 par(mar=c(8,3,3,0.5))
-barplot(as.numeric(as.character(CompRez$ED50)),
-        ylim=c(0,52),col=cooloor[as.numeric(as.factor(CompRez$Subs_Act))],
-        names.arg=CompRez$sample_ID,las=2,
+barplot(as.numeric(as.character(alterCI50$ED50.abs)),
+        ylim=c(0,32),
+        col=cooloor[as.numeric(as.factor(alterCI50$ActiveSub))],
+        names.arg=alterCI50$strain_ID,las=2,
         main="Comparison of the different samples by SA")
-abline(h=12,lty=2)
-abline(h=22,lty=2)
-abline(h=52,lty=2)
+abline(h=32,lty=2)
 legend(300,47,levels(CompRez$Subs_Act),fill=cooloor,bty="n")
 par(op)
 dev.off()
