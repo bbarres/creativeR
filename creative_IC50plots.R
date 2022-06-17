@@ -4,8 +4,8 @@
 ##############################################################################/
 ##############################################################################/
 
-##loading the dataset and the necessary library
-source("recif_load.R")
+##loading the data set and the necessary library
+source("creative_load_data.R")
 
 #in order for this code to work, you need first to run the script for 
 #IC50 estimation
