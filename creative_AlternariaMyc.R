@@ -6,15 +6,8 @@
 
 source("creative_load_data.R")
 
-#subsetting the global dataset
-AlterMyc.dat<-creadat[creadat$species=="Alternaria sp.",]
-AlterMyc.dat<-AlterMyc.dat[AlterMyc.dat$test_type=="mycelial_growth",]
-AlterMyc.dat$species<-factor(AlterMyc.dat$species,
-                             levels=rev(levels(AlterMyc.dat$species)))
-
 #temporary data set loading waiting for the true final data set
-AlterMyc.dat<-read.table(file="data/alternaria_final.txt",header=T,
-                         sep="\t",stringsAsFactors=TRUE)
+AlterMyc.dat<-creadat[creadat$species=="Alternaria sp.",]
 
 #removing missing data
 AlterMyc.dat<-AlterMyc.dat[!is.na(AlterMyc.dat$perc_croiss),]
@@ -86,7 +79,7 @@ for (j in 1: length(levels(AlterMyc.dat$active_substance))) {
   if(dim(subdat)[1]==0) {
     REZ_AlterMy<-rbind(REZ_AlterMy,REZsub)
   } else {
-    pdf(file=paste("output/AltMy",tempAS,".pdf",sep=""),
+    pdf(file=paste("output/AltMy",tempAS,".pdf",sep="_"),
         width=12,height=30)
     op<-par(mfrow=c(10,4))
     for (i in 1: dim(table(subdat$strain_ID))[1]) {
@@ -179,6 +172,13 @@ write.table(REZ_AlterMy,file="output/Alternaria_mycelial.txt",quote=FALSE,
 ##############################################################################/
 #END
 ##############################################################################/
+
+
+
+
+
+
+
 
 
 ####captane####
