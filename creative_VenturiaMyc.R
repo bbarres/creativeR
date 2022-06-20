@@ -80,7 +80,7 @@ for (j in 1: length(levels(VentuMyc.dat$active_substance))) {
   if(dim(subdat)[1]==0) {
     REZ_VentuMy<-rbind(REZ_VentuMy,REZsub)
   } else {
-    pdf(file=paste("output/VenMy",tempAS,".pdf",sep="_"),
+    pdf(file=paste("output/VenMy_",tempAS,".pdf",sep=""),
         width=12,height=30)
     op<-par(mfrow=c(10,4))
     for (i in 1: dim(table(subdat$strain_ID))[1]) {

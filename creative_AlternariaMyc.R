@@ -79,7 +79,7 @@ for (j in 1: length(levels(AlterMyc.dat$active_substance))) {
   if(dim(subdat)[1]==0) {
     REZ_AlterMy<-rbind(REZ_AlterMy,REZsub)
   } else {
-    pdf(file=paste("output/AltMy",tempAS,".pdf",sep="_"),
+    pdf(file=paste("output/AltMy_",tempAS,".pdf",sep=""),
         width=12,height=30)
     op<-par(mfrow=c(10,4))
     for (i in 1: dim(table(subdat$strain_ID))[1]) {
