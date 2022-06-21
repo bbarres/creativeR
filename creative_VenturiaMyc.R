@@ -47,7 +47,8 @@ for (j in 1: length(levels(VentuMyc.dat$active_substance))) {
   subdat_rez<-subdat_rez[!(is.na(subdat_rez))]
   subdat_rez<-names(table(subdat_rez))
   ifelse(length(subdat_rez)==0,
-         REZsub<-data.frame("strain_ID"=as.character(),"ActiveSub"=as.character(),
+         REZsub<-data.frame("strain_ID"=as.character(),
+                            "ActiveSub"=as.character(),
                             "method"=as.character(),"ED50-abs"=as.numeric(),
                             "ED50-SE"=as.numeric(),"ED50-lower"=as.numeric(),
                             "ED50-upper"=as.numeric(),"b-param"=as.numeric(),
@@ -111,7 +112,8 @@ for (j in 1: length(levels(VentuMyc.dat$active_substance))) {
                      data=datatemp,
                      fct=LL.4())
         plot(temp.m1,ylim=c(-10,120),xlim=c(0,30),col=couleur,
-             lty=typeline,type="confidence",main=names(table(subdat$strain_ID))[i])
+             lty=typeline,type="confidence",
+             main=names(table(subdat$strain_ID))[i])
         plot(temp.m1,ylim=c(-10,120),xlim=c(0,30),col="red",
              pch=4,type="obs",add=TRUE)
         plot(temp.m1,ylim=c(-10,120),xlim=c(0,30),col=couleur,
