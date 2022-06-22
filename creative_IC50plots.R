@@ -18,12 +18,14 @@ alterCI50<-read.table("output/Alternaria_mycelial.txt",header=TRUE,
 VenGerCI50<-read.table("output/Venturia_spore.txt",header=TRUE,
                       sep="\t",stringsAsFactors=TRUE)
 
+VenMycCI50<-read.table("output/Venturia_mycelial.txt",header=TRUE,
+                       sep="\t",stringsAsFactors=TRUE)
+
 
 ##############################################################################/
 #barplot to compare the ED50 of the different samples for Alternaria####
 ##############################################################################/
 
-#just a small graphic to gain insight on the first round of results
 #first, we replace the ED50 that were too high to be evaluated with an 
 #arbitrary value
 #adding the species name to the data
@@ -158,13 +160,10 @@ box(bty="l")
 par(op)
 
 
-
-
 ##############################################################################/
 #barplot to compare the ED50 of the different samples for Venturia germin####
 ##############################################################################/
 
-#just a small graphic to gain insight on the first round of results
 #first, we replace the ED50 that were too high to be evaluated with an 
 #arbitrary value
 #adding the species name to the data
@@ -399,13 +398,22 @@ box(bty="l")
 par(op)
 
 
+##############################################################################/
+#barplot to compare the ED50 of the different samples for Venturia mycelial####
+##############################################################################/
+
+#first, we replace the ED50 that were too high to be evaluated with an 
+#arbitrary value
+#adding the species name to the data
+VenMycCI50<-merge(VenMycCI50,speStrai)
+VenMycCI50$ED50.abs<-as.character(VenMycCI50$ED50.abs)
+VenMycCI50[VenMycCI50$ED50.abs==">30","ED50.abs"]<-32
+VenMycCI50$ED50.abs<-as.numeric(as.character(VenMycCI50$ED50.abs))
+
 
 ##############################################################################/
 #correlation between ED50 estimated for different active substances####
 ##############################################################################/
-
-temp<-CompRez[,c(1,2,4)]
-temp<-spread(temp,Subs_Act,ED50)
 
 #a function to compute the absolute correlation between pairs of variables
 panel.cor <- function(x, y, digits=2, prefix="", cex.cor, ...)
@@ -419,21 +427,41 @@ panel.cor <- function(x, y, digits=2, prefix="", cex.cor, ...)
   text(0.5, 0.5, txt, cex = cex.cor * r)
 }
 
-#all 13 active substance
-pairs(log(temp[,c(2:14)]),las=1,main="Correlation between ActSubst",
+#correlation for Alternaria analyses
+temp<-alterCI50[,c(1,2,4)]
+#removing SA that didn't work
+temp<-temp[temp$ActiveSub!="captane" & 
+             temp$ActiveSub!="carbendazim" &
+             temp$ActiveSub!="dithianon" & 
+             temp$ActiveSub!="trifloxystrobine_sham100",]
+temp<-spread(temp,ActiveSub,ED50.abs)
+#all combination
+pairs(log(temp[,c(2:6)]),las=1,main="Correlation between ActSubst",
       lower.panel=panel.smooth, upper.panel=panel.cor)
-#export to pdf 13 x 11 inches
-#all 10 DMI active subsatnce
-pairs(log(temp[,c(2:4,7:13)]),las=1,main="Correlation between ActSubst",
-      lower.panel=panel.smooth, upper.panel=panel.cor)
-#export to pdf 13 x 11 inches
-#only 4 widely investigated DMI
-pairs(log(temp[,c(3,8,11,13)]),las=1,main="Correlation between log(ActSubst)",
-      lower.panel=panel.smooth, upper.panel=panel.cor)
-#export to pdf 8 x 6 inches
 
-#just for the difenoconazole and tetraconazole
-pairs(log(temp[,c(3,12)]),las=1,main="Correlation between log(ActSubst)",
+
+#correlation for Venturia analyses
+temp<-VenGerCI50[,c(1,2,4)]
+temp<-spread(temp,ActiveSub,ED50.abs)
+#all combination
+pairs(log(temp[,c(2:11)]),las=1,main="Correlation between ActSubst",
+      lower.panel=panel.smooth, upper.panel=panel.cor)
+
+#comparison germination vs mycelial growth in Venturia bioassays
+temp<-rbind(VenGerCI50,VenMycCI50)
+#for difenoconazole
+temp1<-temp[temp$ActiveSub=="difenoconazole",]
+temp1<-temp1[,c(1,3,4)]
+temp1<-spread(temp1,method,ED50.abs)
+#all combination
+pairs(log(temp1[,c(2:3)]),las=1,main="Correlation Methods difenoconazole",
+      lower.panel=panel.smooth, upper.panel=panel.cor)
+#for trifloxystrobine
+temp1<-temp[temp$ActiveSub=="trifloxystrobine",]
+temp1<-temp1[,c(1,3,4)]
+temp1<-spread(temp1,method,ED50.abs)
+#all combination
+pairs(log(temp1[,c(2:3)]),las=1,main="Correlation Methods trifloxystrobine",
       lower.panel=panel.smooth, upper.panel=panel.cor)
 
 
