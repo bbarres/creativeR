@@ -7,52 +7,397 @@
 ##loading the data set and the necessary library
 source("creative_load_data.R")
 
+#creating a list of correspondence between strain ID and species
+speStrai<-unique(creadat[,c(1,3)])
+
 #in order for this code to work, you need first to run the script for 
 #IC50 estimation
 alterCI50<-read.table("output/Alternaria_mycelial.txt",header=TRUE,
                       sep="\t",stringsAsFactors=TRUE)
 
+VenGerCI50<-read.table("output/Venturia_spore.txt",header=TRUE,
+                      sep="\t",stringsAsFactors=TRUE)
+
 
 ##############################################################################/
-#barplot to compare the ED50 of the different samples####
+#barplot to compare the ED50 of the different samples for Alternaria####
 ##############################################################################/
 
 #just a small graphic to gain insight on the first round of results
 #first, we replace the ED50 that were too high to be evaluated with an 
 #arbitrary value
-cooloor<- brewer.pal(12,"Set3")
+#adding the species name to the data
+alterCI50<-merge(alterCI50,speStrai)
 alterCI50$ED50.abs<-as.character(alterCI50$ED50.abs)
 alterCI50[alterCI50$ED50.abs==">30","ED50.abs"]<-32
 alterCI50$ED50.abs<-as.numeric(as.character(alterCI50$ED50.abs))
 
-pdf(file="output/histo_AllInd_ASA.pdf",width=60,height=8)
-op<-par(mfrow=c(1,1))
-par(mar=c(8,3,3,0.5))
-barplot(as.numeric(as.character(alterCI50$ED50.abs)),
-        ylim=c(0,32),
-        col=cooloor[as.numeric(as.factor(alterCI50$ActiveSub))],
-        names.arg=alterCI50$strain_ID,las=2,
-        main="Comparison of the different samples by SA")
-abline(h=32,lty=2)
-legend(300,47,levels(CompRez$Subs_Act),fill=cooloor,bty="n")
-par(op)
-dev.off()
+#boscalid
+byprod<-alterCI50[alterCI50$ActiveSub==levels(alterCI50$ActiveSub)[1],]
+activSub<-levels(alterCI50$ActiveSub)[1]
+#creating categories of CI50
+byprod$catCI50<-cut(byprod$ED50.abs,
+                    breaks=c(0,4,8,12,16,20,24,28,32),
+                    include.lowest=TRUE)
+#defining the colors of the points
+levels(byprod$catCI50)<-brewer.pal(11,"RdYlGn")[8:1]
 
-#histogram by samples
-samplelist<-as.character(names(table(CompRez$sample_ID)))
-pdf(file="output/histo_byInd_ASA.pdf",width=9,height=20)
-op<-par(mfrow=c(9,5))
-for (i in (1:length(samplelist))) {
-  temp<-merge(as.data.frame(levels(CompRez$Subs_Act)),
-              CompRez[CompRez$sample_ID==samplelist[i],],
-              by.x=1,by.y=1,
-              all.x=TRUE)
-  barplot(temp$ED50,col=cooloor,las=1,main=samplelist[i],
-          ylim=c(0,52))
-}
+op<-par(mfrow=c(2,1))
+hist(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))]),
+     breaks=seq(0,32,by=2),bty="l",freq=FALSE,las=1,
+     main=activSub,xlim=c(0,32),
+     col=brewer.pal(11,"RdYlGn")[rep(8:1,each=2)],
+     xlab="CI50 Class",ylab="Pourcentage")
+box(bty="l")
+plot(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))]),
+     bg=as.character(byprod$catCI50[order(as.numeric(byprod$ED50.abs))]),
+     cex=1.5,las=1,ylim=c(0,35),pch=21,
+     ylab="CI50",xlab="",
+     main="",frame=FALSE)
+box(bty="l")
 par(op)
-dev.off()
-#export to pdf 12 x 16
+
+#cyprodinil
+byprod<-alterCI50[alterCI50$ActiveSub==levels(alterCI50$ActiveSub)[4],]
+activSub<-levels(alterCI50$ActiveSub)[4]
+#creating categories of CI50
+byprod$catCI50<-cut(byprod$ED50.abs,
+                    breaks=c(0,4,8,12,16,20,24,28,32),
+                    include.lowest=TRUE)
+#defining the colors of the points
+levels(byprod$catCI50)<-brewer.pal(11,"RdYlGn")[8:1]
+
+op<-par(mfrow=c(2,1))
+hist(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))]),
+     breaks=seq(0,32,by=2),bty="l",freq=FALSE,las=1,
+     main=activSub,xlim=c(0,32),
+     col=brewer.pal(11,"RdYlGn")[rep(8:1,each=2)],
+     xlab="CI50 Class",ylab="Pourcentage")
+box(bty="l")
+plot(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))]),
+     bg=as.character(byprod$catCI50[order(as.numeric(byprod$ED50.abs))]),
+     cex=1.5,las=1,ylim=c(0,35),pch=21,
+     ylab="CI50",xlab="",
+     main="",frame=FALSE)
+box(bty="l")
+par(op)
+
+#difenoconazole
+byprod<-alterCI50[alterCI50$ActiveSub==levels(alterCI50$ActiveSub)[5],]
+activSub<-levels(alterCI50$ActiveSub)[5]
+#creating categories of CI50
+byprod$catCI50<-cut(byprod$ED50.abs,
+                    breaks=c(0,4,8,12,16,20,24,28,32),
+                    include.lowest=TRUE)
+#defining the colors of the points
+levels(byprod$catCI50)<-brewer.pal(11,"RdYlGn")[8:1]
+
+op<-par(mfrow=c(2,1))
+hist(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))]),
+     breaks=seq(0,32,by=2),bty="l",freq=FALSE,las=1,
+     main=activSub,xlim=c(0,32),
+     col=brewer.pal(11,"RdYlGn")[rep(8:1,each=2)],
+     xlab="CI50 Class",ylab="Pourcentage")
+box(bty="l")
+plot(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))]),
+     bg=as.character(byprod$catCI50[order(as.numeric(byprod$ED50.abs))]),
+     cex=1.5,las=1,ylim=c(0,35),pch=21,
+     ylab="CI50",xlab="",
+     main="",frame=FALSE)
+box(bty="l")
+par(op)
+
+#dodine
+byprod<-alterCI50[alterCI50$ActiveSub==levels(alterCI50$ActiveSub)[7],]
+activSub<-levels(alterCI50$ActiveSub)[7]
+#creating categories of CI50
+byprod$catCI50<-cut(byprod$ED50.abs,
+                    breaks=c(0,4,8,12,16,20,24,28,32),
+                    include.lowest=TRUE)
+#defining the colors of the points
+levels(byprod$catCI50)<-brewer.pal(11,"RdYlGn")[8:1]
+
+op<-par(mfrow=c(2,1))
+hist(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))]),
+     breaks=seq(0,32,by=2),bty="l",freq=FALSE,las=1,
+     main=activSub,xlim=c(0,32),
+     col=brewer.pal(11,"RdYlGn")[rep(8:1,each=2)],
+     xlab="CI50 Class",ylab="Pourcentage")
+box(bty="l")
+plot(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))]),
+     bg=as.character(byprod$catCI50[order(as.numeric(byprod$ED50.abs))]),
+     cex=1.5,las=1,ylim=c(0,35),pch=21,
+     ylab="CI50",xlab="",
+     main="",frame=FALSE)
+box(bty="l")
+par(op)
+
+#dodine
+byprod<-alterCI50[alterCI50$ActiveSub==levels(alterCI50$ActiveSub)[8],]
+activSub<-levels(alterCI50$ActiveSub)[8]
+#creating categories of CI50
+byprod$catCI50<-cut(byprod$ED50.abs,
+                    breaks=c(0,4,8,12,16,20,24,28,32),
+                    include.lowest=TRUE)
+#defining the colors of the points
+levels(byprod$catCI50)<-brewer.pal(11,"RdYlGn")[8:1]
+
+op<-par(mfrow=c(2,1))
+hist(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))]),
+     breaks=seq(0,32,by=2),bty="l",freq=FALSE,las=1,
+     main=activSub,xlim=c(0,32),
+     col=brewer.pal(11,"RdYlGn")[rep(8:1,each=2)],
+     xlab="CI50 Class",ylab="Pourcentage")
+box(bty="l")
+plot(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))]),
+     bg=as.character(byprod$catCI50[order(as.numeric(byprod$ED50.abs))]),
+     cex=1.5,las=1,ylim=c(0,35),pch=21,
+     ylab="CI50",xlab="",
+     main="",frame=FALSE)
+box(bty="l")
+par(op)
+
+
+
+
+##############################################################################/
+#barplot to compare the ED50 of the different samples for Venturia germin####
+##############################################################################/
+
+#just a small graphic to gain insight on the first round of results
+#first, we replace the ED50 that were too high to be evaluated with an 
+#arbitrary value
+#adding the species name to the data
+VenGerCI50<-merge(VenGerCI50,speStrai)
+VenGerCI50$ED50.abs<-as.character(VenGerCI50$ED50.abs)
+VenGerCI50[VenGerCI50$ED50.abs==">30","ED50.abs"]<-32
+VenGerCI50$ED50.abs<-as.numeric(as.character(VenGerCI50$ED50.abs))
+
+#boscalid
+byprod<-VenGerCI50[VenGerCI50$ActiveSub==levels(VenGerCI50$ActiveSub)[1],]
+activSub<-levels(VenGerCI50$ActiveSub)[1]
+#creating categories of CI50
+byprod$catCI50<-cut(byprod$ED50.abs,
+                    breaks=c(0,4,8,12,16,20,24,28,32),
+                    include.lowest=TRUE)
+#defining the colors of the points
+levels(byprod$catCI50)<-brewer.pal(11,"RdYlGn")[8:1]
+
+op<-par(mfrow=c(2,1))
+hist(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))]),
+     breaks=seq(0,32,by=2),bty="l",freq=FALSE,las=1,
+     main=activSub,xlim=c(0,32),
+     col=brewer.pal(11,"RdYlGn")[rep(8:1,each=2)],
+     xlab="CI50 Class",ylab="Pourcentage")
+box(bty="l")
+plot(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))]),
+     bg=as.character(byprod$catCI50[order(as.numeric(byprod$ED50.abs))]),
+     cex=1.5,las=1,ylim=c(0,35),pch=21,
+     ylab="CI50",xlab="",
+     main="",frame=FALSE)
+box(bty="l")
+par(op)
+
+#captane
+byprod<-VenGerCI50[VenGerCI50$ActiveSub==levels(VenGerCI50$ActiveSub)[2],]
+activSub<-levels(VenGerCI50$ActiveSub)[2]
+#creating categories of CI50
+byprod$catCI50<-cut(byprod$ED50.abs,
+                    breaks=c(0,4,8,12,16,20,24,28,32),
+                    include.lowest=TRUE)
+#defining the colors of the points
+levels(byprod$catCI50)<-brewer.pal(11,"RdYlGn")[8:1]
+
+op<-par(mfrow=c(2,1))
+hist(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))]),
+     breaks=seq(0,32,by=2),bty="l",freq=FALSE,las=1,
+     main=activSub,xlim=c(0,32),
+     col=brewer.pal(11,"RdYlGn")[rep(8:1,each=2)],
+     xlab="CI50 Class",ylab="Pourcentage")
+box(bty="l")
+plot(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))]),
+     bg=as.character(byprod$catCI50[order(as.numeric(byprod$ED50.abs))]),
+     cex=1.5,las=1,ylim=c(0,10),pch=21,
+     ylab="CI50",xlab="",
+     main="",frame=FALSE)
+box(bty="l")
+par(op)
+
+#cyprodinil
+byprod<-VenGerCI50[VenGerCI50$ActiveSub==levels(VenGerCI50$ActiveSub)[3],]
+activSub<-levels(VenGerCI50$ActiveSub)[3]
+#creating categories of CI50
+byprod$catCI50<-cut(byprod$ED50.abs,
+                    breaks=c(0,4,8,12,16,20,24,28,32),
+                    include.lowest=TRUE)
+#defining the colors of the points
+levels(byprod$catCI50)<-brewer.pal(11,"RdYlGn")[8:1]
+
+op<-par(mfrow=c(2,1))
+hist(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))]),
+     breaks=seq(0,32,by=2),bty="l",freq=FALSE,las=1,
+     main=activSub,xlim=c(0,32),
+     col=brewer.pal(11,"RdYlGn")[rep(8:1,each=2)],
+     xlab="CI50 Class",ylab="Pourcentage")
+box(bty="l")
+plot(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))]),
+     bg=as.character(byprod$catCI50[order(as.numeric(byprod$ED50.abs))]),
+     cex=1.5,las=1,ylim=c(0,1),pch=21,
+     ylab="CI50",xlab="",
+     main="",frame=FALSE)
+box(bty="l")
+par(op)
+
+#difénoconazole
+byprod<-VenGerCI50[VenGerCI50$ActiveSub==levels(VenGerCI50$ActiveSub)[4],]
+activSub<-levels(VenGerCI50$ActiveSub)[4]
+#creating categories of CI50
+byprod$catCI50<-cut(byprod$ED50.abs,
+                    breaks=c(0,4,8,12,16,20,24,28,32),
+                    include.lowest=TRUE)
+#defining the colors of the points
+levels(byprod$catCI50)<-brewer.pal(11,"RdYlGn")[8:1]
+
+op<-par(mfrow=c(2,1))
+hist(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))]),
+     breaks=seq(0,32,by=2),bty="l",freq=FALSE,las=1,
+     main=activSub,xlim=c(0,32),
+     col=brewer.pal(11,"RdYlGn")[rep(8:1,each=2)],
+     xlab="CI50 Class",ylab="Pourcentage")
+box(bty="l")
+plot(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))]),
+     bg=as.character(byprod$catCI50[order(as.numeric(byprod$ED50.abs))]),
+     cex=1.5,las=1,ylim=c(0,1),pch=21,
+     ylab="CI50",xlab="",
+     main="",frame=FALSE)
+box(bty="l")
+par(op)
+
+#dithianon
+byprod<-VenGerCI50[VenGerCI50$ActiveSub==levels(VenGerCI50$ActiveSub)[5],]
+activSub<-levels(VenGerCI50$ActiveSub)[5]
+#creating categories of CI50
+byprod$catCI50<-cut(byprod$ED50.abs,
+                    breaks=c(0,4,8,12,16,20,24,28,32),
+                    include.lowest=TRUE)
+#defining the colors of the points
+levels(byprod$catCI50)<-brewer.pal(11,"RdYlGn")[8:1]
+
+op<-par(mfrow=c(2,1))
+hist(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))]),
+     breaks=seq(0,32,by=2),bty="l",freq=FALSE,las=1,
+     main=activSub,xlim=c(0,32),
+     col=brewer.pal(11,"RdYlGn")[rep(8:1,each=2)],
+     xlab="CI50 Class",ylab="Pourcentage")
+box(bty="l")
+plot(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))]),
+     bg=as.character(byprod$catCI50[order(as.numeric(byprod$ED50.abs))]),
+     cex=1.5,las=1,ylim=c(0,1.5),pch=21,
+     ylab="CI50",xlab="",
+     main="",frame=FALSE)
+box(bty="l")
+par(op)
+
+#dodine
+byprod<-VenGerCI50[VenGerCI50$ActiveSub==levels(VenGerCI50$ActiveSub)[6],]
+activSub<-levels(VenGerCI50$ActiveSub)[6]
+#creating categories of CI50
+byprod$catCI50<-cut(byprod$ED50.abs,
+                    breaks=c(0,4,8,12,16,20,24,28,32),
+                    include.lowest=TRUE)
+#defining the colors of the points
+levels(byprod$catCI50)<-brewer.pal(11,"RdYlGn")[8:1]
+
+op<-par(mfrow=c(2,1))
+hist(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))]),
+     breaks=seq(0,32,by=2),bty="l",freq=FALSE,las=1,
+     main=activSub,xlim=c(0,32),
+     col=brewer.pal(11,"RdYlGn")[rep(8:1,each=2)],
+     xlab="CI50 Class",ylab="Pourcentage")
+box(bty="l")
+plot(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))]),
+     bg=as.character(byprod$catCI50[order(as.numeric(byprod$ED50.abs))]),
+     cex=1.5,las=1,ylim=c(0,0.5),pch=21,
+     ylab="CI50",xlab="",
+     main="",frame=FALSE)
+box(bty="l")
+par(op)
+
+#mancozeb
+byprod<-VenGerCI50[VenGerCI50$ActiveSub==levels(VenGerCI50$ActiveSub)[7],]
+activSub<-levels(VenGerCI50$ActiveSub)[7]
+#creating categories of CI50
+byprod$catCI50<-cut(byprod$ED50.abs,
+                    breaks=c(0,4,8,12,16,20,24,28,32),
+                    include.lowest=TRUE)
+#defining the colors of the points
+levels(byprod$catCI50)<-brewer.pal(11,"RdYlGn")[8:1]
+
+op<-par(mfrow=c(2,1))
+hist(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))]),
+     breaks=seq(0,32,by=2),bty="l",freq=FALSE,las=1,
+     main=activSub,xlim=c(0,32),
+     col=brewer.pal(11,"RdYlGn")[rep(8:1,each=2)],
+     xlab="CI50 Class",ylab="Pourcentage")
+box(bty="l")
+plot(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))]),
+     bg=as.character(byprod$catCI50[order(as.numeric(byprod$ED50.abs))]),
+     cex=1.5,las=1,ylim=c(0,1),pch=21,
+     ylab="CI50",xlab="",
+     main="",frame=FALSE)
+box(bty="l")
+par(op)
+
+#manebe
+byprod<-VenGerCI50[VenGerCI50$ActiveSub==levels(VenGerCI50$ActiveSub)[8],]
+activSub<-levels(VenGerCI50$ActiveSub)[8]
+#creating categories of CI50
+byprod$catCI50<-cut(byprod$ED50.abs,
+                    breaks=c(0,4,8,12,16,20,24,28,32),
+                    include.lowest=TRUE)
+#defining the colors of the points
+levels(byprod$catCI50)<-brewer.pal(11,"RdYlGn")[8:1]
+
+op<-par(mfrow=c(2,1))
+hist(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))]),
+     breaks=seq(0,32,by=2),bty="l",freq=FALSE,las=1,
+     main=activSub,xlim=c(0,32),
+     col=brewer.pal(11,"RdYlGn")[rep(8:1,each=2)],
+     xlab="CI50 Class",ylab="Pourcentage")
+box(bty="l")
+plot(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))]),
+     bg=as.character(byprod$catCI50[order(as.numeric(byprod$ED50.abs))]),
+     cex=1.5,las=1,ylim=c(0,1),pch=21,
+     ylab="CI50",xlab="",
+     main="",frame=FALSE)
+box(bty="l")
+par(op)
+
+#thirame
+byprod<-VenGerCI50[VenGerCI50$ActiveSub==levels(VenGerCI50$ActiveSub)[9],]
+activSub<-levels(VenGerCI50$ActiveSub)[9]
+#creating categories of CI50
+byprod$catCI50<-cut(byprod$ED50.abs,
+                    breaks=c(0,4,8,12,16,20,24,28,32),
+                    include.lowest=TRUE)
+#defining the colors of the points
+levels(byprod$catCI50)<-brewer.pal(11,"RdYlGn")[8:1]
+
+op<-par(mfrow=c(2,1))
+hist(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))]),
+     breaks=seq(0,32,by=2),bty="l",freq=FALSE,las=1,
+     main=activSub,xlim=c(0,32),
+     col=brewer.pal(11,"RdYlGn")[rep(8:1,each=2)],
+     xlab="CI50 Class",ylab="Pourcentage")
+box(bty="l")
+plot(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))]),
+     bg=as.character(byprod$catCI50[order(as.numeric(byprod$ED50.abs))]),
+     cex=1.5,las=1,ylim=c(0,1),pch=21,
+     ylab="CI50",xlab="",
+     main="",frame=FALSE)
+box(bty="l")
+par(op)
+
 
 
 ##############################################################################/
