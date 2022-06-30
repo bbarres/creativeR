@@ -394,7 +394,7 @@ box(bty="l")
 par(op)
 #adding RF based on the mean CI50 of the 15 most sensitive individual (
 #approximately 10% of the tested strains)
-sensit<-mean(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))])[1:20])
+sensit<-mean(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))])[1:2])
 byprod$factres<-byprod$ED50.abs/sensit
 byprod<-byprod[order(as.numeric(byprod$factres)),]
 VenGFR<-rbind(VenGFR,byprod[,c(1:4,24:26)])
@@ -496,6 +496,9 @@ byprod<-byprod[order(as.numeric(byprod$factres)),]
 VenGFR<-rbind(VenGFR,byprod[,c(1:4,24:26)])
 plot(VenGFR[VenGFR$ActiveSub=="thirame","factres"])
 
+#because the difenoconazole was also studied using mycelial growth method, 
+#we remove the result in this object
+VenGFR<-VenGFR[VenGFR$ActiveSub!="difenoconazole",]
 VenGFR<-drop.levels(VenGFR,reorder=FALSE)
 
 
@@ -622,7 +625,8 @@ legend(20,0.5,legend=levels(AltFR$ActiveSub),
        bty="n")
 #export to .pdf 6 x 6
 
-bornes<-c(min(VenGFR$factres,na.rm=TRUE),max(VenGFR$factres,na.rm=TRUE))
+bornes<-c(min(VenGFR$factres,na.rm=TRUE),
+          max(c(VenGFR$factres,na.rm=TRUE),100))
 i<-1
 plot(VenGFR[VenGFR$ActiveSub==levels(VenGFR$ActiveSub)[i],"factres"],log="y",
      pch=as.numeric(VenGFR[VenGFR$ActiveSub==levels(VenGFR$ActiveSub)[i],
@@ -671,13 +675,13 @@ points(VenGFR[VenGFR$ActiveSub==levels(VenGFR$ActiveSub)[i],"factres"],
        pch=as.numeric(VenGFR[VenGFR$ActiveSub==levels(VenGFR$ActiveSub)[i],
                              "species"])+20,
        cex=1,las=1,bg=cooloor[i])
-legend(30,0.8,legend=levels(VenGFR$ActiveSub),
+legend(30,1,legend=levels(VenGFR$ActiveSub),
        cex=1,pt.cex=1.3,
        y.intersp=1,x.intersp=1.2,
        pch=c(15),
        col=cooloor[c(1,2,3,4,5,6,7,8,9)],
        bty="n")
-legend(10,0.2,legend=levels(VenGFR$species),cex=1,
+legend(10,0.7,legend=levels(VenGFR$species),cex=1,
        pt.cex=1.3,y.intersp=1,x.intersp=1.2,
        pch=c(21,22,23),bty="n")
 #export to .pdf 6 x 6
@@ -706,6 +710,8 @@ legend(20,0.8,legend=levels(VenMFR$species),cex=1,
        pt.cex=1.3,y.intersp=1,x.intersp=1.2,
        pch=c(21,22,23),bty="n")
 #export to .pdf 6 x 6
+
+par(op)
 
 
 #same plot but combine on one figure and with log(EC50)
