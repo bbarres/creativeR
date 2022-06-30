@@ -34,6 +34,7 @@ alterCI50$ED50.abs<-as.character(alterCI50$ED50.abs)
 alterCI50[alterCI50$ED50.abs==">30","ED50.abs"]<-32
 alterCI50$ED50.abs<-as.numeric(as.character(alterCI50$ED50.abs))
 
+
 #boscalid
 byprod<-alterCI50[alterCI50$ActiveSub==levels(alterCI50$ActiveSub)[1],]
 activSub<-levels(alterCI50$ActiveSub)[1]
@@ -43,7 +44,6 @@ byprod$catCI50<-cut(byprod$ED50.abs,
                     include.lowest=TRUE)
 #defining the colors of the points
 levels(byprod$catCI50)<-brewer.pal(11,"RdYlGn")[8:1]
-
 op<-par(mfrow=c(2,1))
 hist(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))]),
      breaks=seq(0,32,by=2),bty="l",freq=FALSE,las=1,
@@ -58,6 +58,13 @@ plot(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))]),
      main="",frame=FALSE)
 box(bty="l")
 par(op)
+#adding RF based on the mean CI50 of the 4 most sensitive individual (
+#approximately 10% of the tested strains)
+sensit<-mean(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))])[1:10])
+byprod$factres<-byprod$ED50.abs/sensit
+byprod<-byprod[order(as.numeric(byprod$factres)),]
+AltFR<-byprod[,c(1:4,24:26)]
+
 
 #cyprodinil
 byprod<-alterCI50[alterCI50$ActiveSub==levels(alterCI50$ActiveSub)[4],]
@@ -68,7 +75,6 @@ byprod$catCI50<-cut(byprod$ED50.abs,
                     include.lowest=TRUE)
 #defining the colors of the points
 levels(byprod$catCI50)<-brewer.pal(11,"RdYlGn")[8:1]
-
 op<-par(mfrow=c(2,1))
 hist(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))]),
      breaks=seq(0,32,by=2),bty="l",freq=FALSE,las=1,
@@ -83,6 +89,14 @@ plot(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))]),
      main="",frame=FALSE)
 box(bty="l")
 par(op)
+#adding RF based on the mean CI50 of the 4 most sensitive individual (
+#approximately 10% of the tested strains)
+sensit<-mean(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))])[1:10])
+byprod$factres<-byprod$ED50.abs/sensit
+byprod<-byprod[order(as.numeric(byprod$factres)),]
+AltFR<-rbind(AltFR,byprod[,c(1:4,24:26)])
+plot(AltFR[AltFR$ActiveSub=="cyprodinil","factres"])
+
 
 #difenoconazole
 byprod<-alterCI50[alterCI50$ActiveSub==levels(alterCI50$ActiveSub)[5],]
@@ -93,7 +107,6 @@ byprod$catCI50<-cut(byprod$ED50.abs,
                     include.lowest=TRUE)
 #defining the colors of the points
 levels(byprod$catCI50)<-brewer.pal(11,"RdYlGn")[8:1]
-
 op<-par(mfrow=c(2,1))
 hist(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))]),
      breaks=seq(0,32,by=2),bty="l",freq=FALSE,las=1,
@@ -108,6 +121,14 @@ plot(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))]),
      main="",frame=FALSE)
 box(bty="l")
 par(op)
+#adding RF based on the mean CI50 of the 10 most sensitive individual (
+#approximately 10% of the tested strains)
+sensit<-mean(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))])[1:10])
+byprod$factres<-byprod$ED50.abs/sensit
+byprod<-byprod[order(as.numeric(byprod$factres)),]
+AltFR<-rbind(AltFR,byprod[,c(1:4,24:26)])
+plot(AltFR[AltFR$ActiveSub=="difenoconazole","factres"])
+
 
 #dodine
 byprod<-alterCI50[alterCI50$ActiveSub==levels(alterCI50$ActiveSub)[7],]
@@ -118,7 +139,6 @@ byprod$catCI50<-cut(byprod$ED50.abs,
                     include.lowest=TRUE)
 #defining the colors of the points
 levels(byprod$catCI50)<-brewer.pal(11,"RdYlGn")[8:1]
-
 op<-par(mfrow=c(2,1))
 hist(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))]),
      breaks=seq(0,32,by=2),bty="l",freq=FALSE,las=1,
@@ -133,8 +153,16 @@ plot(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))]),
      main="",frame=FALSE)
 box(bty="l")
 par(op)
+#adding RF based on the mean CI50 of the 10 most sensitive individual (
+#approximately 10% of the tested strains)
+sensit<-mean(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))])[1])
+byprod$factres<-byprod$ED50.abs/sensit
+byprod<-byprod[order(as.numeric(byprod$factres)),]
+AltFR<-rbind(AltFR,byprod[,c(1:4,24:26)])
+plot(AltFR[AltFR$ActiveSub=="dodine","factres"])
 
-#dodine
+
+#fluopyram
 byprod<-alterCI50[alterCI50$ActiveSub==levels(alterCI50$ActiveSub)[8],]
 activSub<-levels(alterCI50$ActiveSub)[8]
 #creating categories of CI50
@@ -143,7 +171,6 @@ byprod$catCI50<-cut(byprod$ED50.abs,
                     include.lowest=TRUE)
 #defining the colors of the points
 levels(byprod$catCI50)<-brewer.pal(11,"RdYlGn")[8:1]
-
 op<-par(mfrow=c(2,1))
 hist(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))]),
      breaks=seq(0,32,by=2),bty="l",freq=FALSE,las=1,
@@ -158,6 +185,15 @@ plot(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))]),
      main="",frame=FALSE)
 box(bty="l")
 par(op)
+#adding RF based on the mean CI50 of the 10 most sensitive individual (
+#approximately 10% of the tested strains)
+sensit<-mean(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))])[1:10])
+byprod$factres<-byprod$ED50.abs/sensit
+byprod<-byprod[order(as.numeric(byprod$factres)),]
+AltFR<-rbind(AltFR,byprod[,c(1:4,24:26)])
+plot(AltFR[AltFR$ActiveSub=="fluopyram","factres"])
+
+AltFR<-drop.levels(AltFR,reorder=FALSE)
 
 
 ##############################################################################/
@@ -172,6 +208,7 @@ VenGerCI50$ED50.abs<-as.character(VenGerCI50$ED50.abs)
 VenGerCI50[VenGerCI50$ED50.abs==">30","ED50.abs"]<-32
 VenGerCI50$ED50.abs<-as.numeric(as.character(VenGerCI50$ED50.abs))
 
+
 #boscalid
 byprod<-VenGerCI50[VenGerCI50$ActiveSub==levels(VenGerCI50$ActiveSub)[1],]
 activSub<-levels(VenGerCI50$ActiveSub)[1]
@@ -181,7 +218,6 @@ byprod$catCI50<-cut(byprod$ED50.abs,
                     include.lowest=TRUE)
 #defining the colors of the points
 levels(byprod$catCI50)<-brewer.pal(11,"RdYlGn")[8:1]
-
 op<-par(mfrow=c(2,1))
 hist(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))]),
      breaks=seq(0,32,by=2),bty="l",freq=FALSE,las=1,
@@ -196,6 +232,14 @@ plot(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))]),
      main="",frame=FALSE)
 box(bty="l")
 par(op)
+#adding RF based on the mean CI50 of the 15 most sensitive individual (
+#approximately 10% of the tested strains)
+sensit<-mean(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))])[1:15])
+byprod$factres<-byprod$ED50.abs/sensit
+byprod<-byprod[order(as.numeric(byprod$factres)),]
+VenGFR<-byprod[,c(1:4,24:26)]
+plot(VenGFR[VenGFR$ActiveSub=="boscalid","factres"])
+
 
 #captane
 byprod<-VenGerCI50[VenGerCI50$ActiveSub==levels(VenGerCI50$ActiveSub)[2],]
@@ -206,7 +250,6 @@ byprod$catCI50<-cut(byprod$ED50.abs,
                     include.lowest=TRUE)
 #defining the colors of the points
 levels(byprod$catCI50)<-brewer.pal(11,"RdYlGn")[8:1]
-
 op<-par(mfrow=c(2,1))
 hist(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))]),
      breaks=seq(0,32,by=2),bty="l",freq=FALSE,las=1,
@@ -221,6 +264,14 @@ plot(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))]),
      main="",frame=FALSE)
 box(bty="l")
 par(op)
+#adding RF based on the mean CI50 of the 15 most sensitive individual (
+#approximately 10% of the tested strains)
+sensit<-mean(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))])[1:15])
+byprod$factres<-byprod$ED50.abs/sensit
+byprod<-byprod[order(as.numeric(byprod$factres)),]
+VenGFR<-rbind(VenGFR,byprod[,c(1:4,24:26)])
+plot(VenGFR[VenGFR$ActiveSub=="captane","factres"])
+
 
 #cyprodinil
 byprod<-VenGerCI50[VenGerCI50$ActiveSub==levels(VenGerCI50$ActiveSub)[3],]
@@ -231,7 +282,6 @@ byprod$catCI50<-cut(byprod$ED50.abs,
                     include.lowest=TRUE)
 #defining the colors of the points
 levels(byprod$catCI50)<-brewer.pal(11,"RdYlGn")[8:1]
-
 op<-par(mfrow=c(2,1))
 hist(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))]),
      breaks=seq(0,32,by=2),bty="l",freq=FALSE,las=1,
@@ -246,6 +296,14 @@ plot(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))]),
      main="",frame=FALSE)
 box(bty="l")
 par(op)
+#adding RF based on the mean CI50 of the 15 most sensitive individual (
+#approximately 10% of the tested strains)
+sensit<-mean(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))])[1:15])
+byprod$factres<-byprod$ED50.abs/sensit
+byprod<-byprod[order(as.numeric(byprod$factres)),]
+VenGFR<-rbind(VenGFR,byprod[,c(1:4,24:26)])
+plot(VenGFR[VenGFR$ActiveSub=="cyprodinil","factres"])
+
 
 #difénoconazole
 byprod<-VenGerCI50[VenGerCI50$ActiveSub==levels(VenGerCI50$ActiveSub)[4],]
@@ -256,7 +314,6 @@ byprod$catCI50<-cut(byprod$ED50.abs,
                     include.lowest=TRUE)
 #defining the colors of the points
 levels(byprod$catCI50)<-brewer.pal(11,"RdYlGn")[8:1]
-
 op<-par(mfrow=c(2,1))
 hist(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))]),
      breaks=seq(0,32,by=2),bty="l",freq=FALSE,las=1,
@@ -271,6 +328,14 @@ plot(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))]),
      main="",frame=FALSE)
 box(bty="l")
 par(op)
+#adding RF based on the mean CI50 of the 15 most sensitive individual (
+#approximately 10% of the tested strains)
+sensit<-mean(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))])[1:20])
+byprod$factres<-byprod$ED50.abs/sensit
+byprod<-byprod[order(as.numeric(byprod$factres)),]
+VenGFR<-rbind(VenGFR,byprod[,c(1:4,24:26)])
+plot(VenGFR[VenGFR$ActiveSub=="difenoconazole","factres"])
+
 
 #dithianon
 byprod<-VenGerCI50[VenGerCI50$ActiveSub==levels(VenGerCI50$ActiveSub)[5],]
@@ -281,7 +346,6 @@ byprod$catCI50<-cut(byprod$ED50.abs,
                     include.lowest=TRUE)
 #defining the colors of the points
 levels(byprod$catCI50)<-brewer.pal(11,"RdYlGn")[8:1]
-
 op<-par(mfrow=c(2,1))
 hist(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))]),
      breaks=seq(0,32,by=2),bty="l",freq=FALSE,las=1,
@@ -296,6 +360,14 @@ plot(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))]),
      main="",frame=FALSE)
 box(bty="l")
 par(op)
+#adding RF based on the mean CI50 of the 15 most sensitive individual (
+#approximately 10% of the tested strains)
+sensit<-mean(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))])[1:15])
+byprod$factres<-byprod$ED50.abs/sensit
+byprod<-byprod[order(as.numeric(byprod$factres)),]
+VenGFR<-rbind(VenGFR,byprod[,c(1:4,24:26)])
+plot(VenGFR[VenGFR$ActiveSub=="dithianon","factres"])
+
 
 #dodine
 byprod<-VenGerCI50[VenGerCI50$ActiveSub==levels(VenGerCI50$ActiveSub)[6],]
@@ -306,7 +378,6 @@ byprod$catCI50<-cut(byprod$ED50.abs,
                     include.lowest=TRUE)
 #defining the colors of the points
 levels(byprod$catCI50)<-brewer.pal(11,"RdYlGn")[8:1]
-
 op<-par(mfrow=c(2,1))
 hist(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))]),
      breaks=seq(0,32,by=2),bty="l",freq=FALSE,las=1,
@@ -321,6 +392,14 @@ plot(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))]),
      main="",frame=FALSE)
 box(bty="l")
 par(op)
+#adding RF based on the mean CI50 of the 15 most sensitive individual (
+#approximately 10% of the tested strains)
+sensit<-mean(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))])[1:20])
+byprod$factres<-byprod$ED50.abs/sensit
+byprod<-byprod[order(as.numeric(byprod$factres)),]
+VenGFR<-rbind(VenGFR,byprod[,c(1:4,24:26)])
+plot(VenGFR[VenGFR$ActiveSub=="dodine","factres"])
+
 
 #mancozeb
 byprod<-VenGerCI50[VenGerCI50$ActiveSub==levels(VenGerCI50$ActiveSub)[7],]
@@ -331,7 +410,6 @@ byprod$catCI50<-cut(byprod$ED50.abs,
                     include.lowest=TRUE)
 #defining the colors of the points
 levels(byprod$catCI50)<-brewer.pal(11,"RdYlGn")[8:1]
-
 op<-par(mfrow=c(2,1))
 hist(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))]),
      breaks=seq(0,32,by=2),bty="l",freq=FALSE,las=1,
@@ -346,6 +424,14 @@ plot(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))]),
      main="",frame=FALSE)
 box(bty="l")
 par(op)
+#adding RF based on the mean CI50 of the 15 most sensitive individual (
+#approximately 10% of the tested strains)
+sensit<-mean(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))])[1:20])
+byprod$factres<-byprod$ED50.abs/sensit
+byprod<-byprod[order(as.numeric(byprod$factres)),]
+VenGFR<-rbind(VenGFR,byprod[,c(1:4,24:26)])
+plot(VenGFR[VenGFR$ActiveSub=="mancozeb","factres"])
+
 
 #manebe
 byprod<-VenGerCI50[VenGerCI50$ActiveSub==levels(VenGerCI50$ActiveSub)[8],]
@@ -356,7 +442,6 @@ byprod$catCI50<-cut(byprod$ED50.abs,
                     include.lowest=TRUE)
 #defining the colors of the points
 levels(byprod$catCI50)<-brewer.pal(11,"RdYlGn")[8:1]
-
 op<-par(mfrow=c(2,1))
 hist(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))]),
      breaks=seq(0,32,by=2),bty="l",freq=FALSE,las=1,
@@ -371,6 +456,14 @@ plot(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))]),
      main="",frame=FALSE)
 box(bty="l")
 par(op)
+#adding RF based on the mean CI50 of the 15 most sensitive individual (
+#approximately 10% of the tested strains)
+sensit<-mean(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))])[1:20])
+byprod$factres<-byprod$ED50.abs/sensit
+byprod<-byprod[order(as.numeric(byprod$factres)),]
+VenGFR<-rbind(VenGFR,byprod[,c(1:4,24:26)])
+plot(VenGFR[VenGFR$ActiveSub=="manebe","factres"])
+
 
 #thirame
 byprod<-VenGerCI50[VenGerCI50$ActiveSub==levels(VenGerCI50$ActiveSub)[9],]
@@ -381,7 +474,6 @@ byprod$catCI50<-cut(byprod$ED50.abs,
                     include.lowest=TRUE)
 #defining the colors of the points
 levels(byprod$catCI50)<-brewer.pal(11,"RdYlGn")[8:1]
-
 op<-par(mfrow=c(2,1))
 hist(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))]),
      breaks=seq(0,32,by=2),bty="l",freq=FALSE,las=1,
@@ -396,6 +488,15 @@ plot(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))]),
      main="",frame=FALSE)
 box(bty="l")
 par(op)
+#adding RF based on the mean CI50 of the 15 most sensitive individual (
+#approximately 10% of the tested strains)
+sensit<-mean(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))])[1:15])
+byprod$factres<-byprod$ED50.abs/sensit
+byprod<-byprod[order(as.numeric(byprod$factres)),]
+VenGFR<-rbind(VenGFR,byprod[,c(1:4,24:26)])
+plot(VenGFR[VenGFR$ActiveSub=="thirame","factres"])
+
+VenGFR<-drop.levels(VenGFR,reorder=FALSE)
 
 
 ##############################################################################/
@@ -409,6 +510,237 @@ VenMycCI50<-merge(VenMycCI50,speStrai)
 VenMycCI50$ED50.abs<-as.character(VenMycCI50$ED50.abs)
 VenMycCI50[VenMycCI50$ED50.abs==">30","ED50.abs"]<-32
 VenMycCI50$ED50.abs<-as.numeric(as.character(VenMycCI50$ED50.abs))
+
+
+#difenoconazole
+byprod<-VenMycCI50[VenMycCI50$ActiveSub==levels(VenMycCI50$ActiveSub)[3],]
+activSub<-levels(VenMycCI50$ActiveSub)[3]
+#creating categories of CI50
+byprod$catCI50<-cut(byprod$ED50.abs,
+                    breaks=c(0,4,8,12,16,20,24,28,32),
+                    include.lowest=TRUE)
+#defining the colors of the points
+levels(byprod$catCI50)<-brewer.pal(11,"RdYlGn")[8:1]
+op<-par(mfrow=c(2,1))
+hist(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))]),
+     breaks=seq(0,32,by=2),bty="l",freq=FALSE,las=1,
+     main=activSub,xlim=c(0,32),
+     col=brewer.pal(11,"RdYlGn")[rep(8:1,each=2)],
+     xlab="CI50 Class",ylab="Pourcentage")
+box(bty="l")
+plot(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))]),
+     bg=as.character(byprod$catCI50[order(as.numeric(byprod$ED50.abs))]),
+     cex=1.5,las=1,ylim=c(0,5),pch=21,
+     ylab="CI50",xlab="",
+     main="",frame=FALSE)
+box(bty="l")
+par(op)
+#adding RF based on the mean CI50 of the 15 most sensitive individual (
+#approximately 10% of the tested strains)
+sensit<-mean(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))])[1:20])
+byprod$factres<-byprod$ED50.abs/sensit
+byprod<-byprod[order(as.numeric(byprod$factres)),]
+VenMFR<-byprod[,c(1:4,24:26)]
+plot(VenMFR[VenMFR$ActiveSub=="difenoconazole","factres"])
+
+
+#trifloxystrobine
+byprod<-VenMycCI50[VenMycCI50$ActiveSub==levels(VenMycCI50$ActiveSub)[5],]
+activSub<-levels(VenMycCI50$ActiveSub)[5]
+#creating categories of CI50
+byprod$catCI50<-cut(byprod$ED50.abs,
+                    breaks=c(0,4,8,12,16,20,24,28,32),
+                    include.lowest=TRUE)
+#defining the colors of the points
+levels(byprod$catCI50)<-brewer.pal(11,"RdYlGn")[8:1]
+op<-par(mfrow=c(2,1))
+hist(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))]),
+     breaks=seq(0,32,by=2),bty="l",freq=FALSE,las=1,
+     main=activSub,xlim=c(0,32),
+     col=brewer.pal(11,"RdYlGn")[rep(8:1,each=2)],
+     xlab="CI50 Class",ylab="Pourcentage")
+box(bty="l")
+plot(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))]),
+     bg=as.character(byprod$catCI50[order(as.numeric(byprod$ED50.abs))]),
+     cex=1.5,las=1,ylim=c(0,5),pch=21,
+     ylab="CI50",xlab="",
+     main="",frame=FALSE)
+box(bty="l")
+par(op)
+#adding RF based on the mean CI50 of the 15 most sensitive individual (
+#approximately 10% of the tested strains)
+sensit<-mean(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))])[1:20])
+byprod$factres<-byprod$ED50.abs/sensit
+byprod<-byprod[order(as.numeric(byprod$factres)),]
+VenMFR<-rbind(VenMFR,byprod[,c(1:4,24:26)])
+plot(VenMFR[VenMFR$ActiveSub=="trifloxystrobine","factres"])
+
+VenMFR<-drop.levels(VenMFR,reorder=FALSE)
+
+
+##############################################################################/
+#Multi FR plot####
+##############################################################################/
+
+cooloor<- brewer.pal(12,"Set3")
+options(scipen=10000)
+op<-par(mfrow=c(1,3))
+bornes<-c(min(AltFR$factres,na.rm=TRUE),max(AltFR$factres,na.rm=TRUE))
+i<-1
+plot(AltFR[AltFR$ActiveSub==levels(AltFR$ActiveSub)[i],"factres"],log="y",
+     pch=as.numeric(AltFR[AltFR$ActiveSub==levels(AltFR$ActiveSub)[i],
+                          "species"])+20,
+     main="Distribution FR Alternaria",ylim=bornes,cex=1,las=1,
+     ylab="FR",bg=cooloor[i])
+abline(h=10,col=grey(0.3,0.8),lwd=5,lty=2)
+abline(h=100,col=grey(0.3,0.8),lwd=5,lty=2)
+i<-2
+points(AltFR[AltFR$ActiveSub==levels(AltFR$ActiveSub)[i],"factres"],
+       pch=as.numeric(AltFR[AltFR$ActiveSub==levels(AltFR$ActiveSub)[i],
+                            "species"])+20,
+       cex=1,las=1,bg=cooloor[i])
+i<-3
+points(AltFR[AltFR$ActiveSub==levels(AltFR$ActiveSub)[i],"factres"],
+       pch=as.numeric(AltFR[AltFR$ActiveSub==levels(AltFR$ActiveSub)[i],
+                            "species"])+20,
+       cex=1,las=1,bg=cooloor[i])
+i<-4
+points(AltFR[AltFR$ActiveSub==levels(AltFR$ActiveSub)[i],"factres"],
+       pch=as.numeric(AltFR[AltFR$ActiveSub==levels(AltFR$ActiveSub)[i],
+                            "species"])+20,
+       cex=1,las=1,bg=cooloor[i])
+i<-5
+points(AltFR[AltFR$ActiveSub==levels(AltFR$ActiveSub)[i],"factres"],
+       pch=as.numeric(AltFR[AltFR$ActiveSub==levels(AltFR$ActiveSub)[i],
+                            "species"])+20,
+       cex=1,las=1,bg=cooloor[i])
+legend(20,0.5,legend=levels(AltFR$ActiveSub),
+       cex=1,pt.cex=1.3,
+       y.intersp=1,x.intersp=1.2,
+       pch=c(15),
+       col=cooloor[c(1,2,3,4,5)],
+       bty="n")
+#export to .pdf 6 x 6
+
+bornes<-c(min(VenGFR$factres,na.rm=TRUE),max(VenGFR$factres,na.rm=TRUE))
+i<-1
+plot(VenGFR[VenGFR$ActiveSub==levels(VenGFR$ActiveSub)[i],"factres"],log="y",
+     pch=as.numeric(VenGFR[VenGFR$ActiveSub==levels(VenGFR$ActiveSub)[i],
+                          "species"])+20,
+     main="Distribution FR Venturia Germination",ylim=bornes,cex=1,las=1,
+     ylab="FR",bg=cooloor[i])
+abline(h=10,col=grey(0.3,0.8),lwd=5,lty=2)
+abline(h=100,col=grey(0.3,0.8),lwd=5,lty=2)
+i<-2
+points(VenGFR[VenGFR$ActiveSub==levels(VenGFR$ActiveSub)[i],"factres"],
+       pch=as.numeric(VenGFR[VenGFR$ActiveSub==levels(VenGFR$ActiveSub)[i],
+                            "species"])+20,
+       cex=1,las=1,bg=cooloor[i])
+i<-3
+points(VenGFR[VenGFR$ActiveSub==levels(VenGFR$ActiveSub)[i],"factres"],
+       pch=as.numeric(VenGFR[VenGFR$ActiveSub==levels(VenGFR$ActiveSub)[i],
+                            "species"])+20,
+       cex=1,las=1,bg=cooloor[i])
+i<-4
+points(VenGFR[VenGFR$ActiveSub==levels(VenGFR$ActiveSub)[i],"factres"],
+       pch=as.numeric(VenGFR[VenGFR$ActiveSub==levels(VenGFR$ActiveSub)[i],
+                            "species"])+20,
+       cex=1,las=1,bg=cooloor[i])
+i<-5
+points(VenGFR[VenGFR$ActiveSub==levels(VenGFR$ActiveSub)[i],"factres"],
+       pch=as.numeric(VenGFR[VenGFR$ActiveSub==levels(VenGFR$ActiveSub)[i],
+                            "species"])+20,
+       cex=1,las=1,bg=cooloor[i])
+i<-6
+points(VenGFR[VenGFR$ActiveSub==levels(VenGFR$ActiveSub)[i],"factres"],
+       pch=as.numeric(VenGFR[VenGFR$ActiveSub==levels(VenGFR$ActiveSub)[i],
+                             "species"])+20,
+       cex=1,las=1,bg=cooloor[i])
+i<-7
+points(VenGFR[VenGFR$ActiveSub==levels(VenGFR$ActiveSub)[i],"factres"],
+       pch=as.numeric(VenGFR[VenGFR$ActiveSub==levels(VenGFR$ActiveSub)[i],
+                             "species"])+20,
+       cex=1,las=1,bg=cooloor[i])
+i<-8
+points(VenGFR[VenGFR$ActiveSub==levels(VenGFR$ActiveSub)[i],"factres"],
+       pch=as.numeric(VenGFR[VenGFR$ActiveSub==levels(VenGFR$ActiveSub)[i],
+                             "species"])+20,
+       cex=1,las=1,bg=cooloor[i])
+i<-9
+points(VenGFR[VenGFR$ActiveSub==levels(VenGFR$ActiveSub)[i],"factres"],
+       pch=as.numeric(VenGFR[VenGFR$ActiveSub==levels(VenGFR$ActiveSub)[i],
+                             "species"])+20,
+       cex=1,las=1,bg=cooloor[i])
+legend(30,0.8,legend=levels(VenGFR$ActiveSub),
+       cex=1,pt.cex=1.3,
+       y.intersp=1,x.intersp=1.2,
+       pch=c(15),
+       col=cooloor[c(1,2,3,4,5,6,7,8,9)],
+       bty="n")
+legend(10,0.2,legend=levels(VenGFR$species),cex=1,
+       pt.cex=1.3,y.intersp=1,x.intersp=1.2,
+       pch=c(21,22,23),bty="n")
+#export to .pdf 6 x 6
+
+bornes<-c(min(VenMFR$factres,na.rm=TRUE),max(VenMFR$factres,na.rm=TRUE))
+i<-1
+plot(VenMFR[VenMFR$ActiveSub==levels(VenMFR$ActiveSub)[i],"factres"],log="y",
+     pch=as.numeric(VenMFR[VenMFR$ActiveSub==levels(VenMFR$ActiveSub)[i],
+                           "species"])+20,
+     main="Distribution FR Venturia Germination",ylim=bornes,cex=1,las=1,
+     ylab="FR",bg=cooloor[i])
+abline(h=10,col=grey(0.3,0.8),lwd=5,lty=2)
+abline(h=100,col=grey(0.3,0.8),lwd=5,lty=2)
+i<-2
+points(VenMFR[VenMFR$ActiveSub==levels(VenMFR$ActiveSub)[i],"factres"],
+       pch=as.numeric(VenMFR[VenMFR$ActiveSub==levels(VenMFR$ActiveSub)[i],
+                             "species"])+20,
+       cex=1,las=1,bg=cooloor[i])
+legend(40,0.8,legend=levels(VenMFR$ActiveSub),
+       cex=1,pt.cex=1.3,
+       y.intersp=1,x.intersp=1.2,
+       pch=c(15),
+       col=cooloor[c(1,2)],
+       bty="n")
+legend(20,0.8,legend=levels(VenMFR$species),cex=1,
+       pt.cex=1.3,y.intersp=1,x.intersp=1.2,
+       pch=c(21,22,23),bty="n")
+#export to .pdf 6 x 6
+
+
+#same plot but combine on one figure and with log(EC50)
+plot(log(temp[order(c(temp$CYPROCONAZOLE)),"CYPROCONAZOLE"]),
+     main="log EC50 distribution",bg=cooloor[1],pch=21,cex=1,las=1,
+     ylab="log(EC50)",ylim=c(-6,6))
+points(log(temp[order(c(temp$DIFENOCONAZOLE)),"DIFENOCONAZOLE"]),
+       bg=cooloor[2],pch=21,cex=1,las=1)
+points(log(temp[order(c(temp$EPOXICONAZOLE)),"EPOXICONAZOLE"]),
+       bg=cooloor[3],pch=21,cex=1,las=1)
+points(log(temp[order(c(temp$FLUTRIAFOL)),"FLUTRIAFOL"]),
+       bg=cooloor[5],pch=21,cex=1,las=1)
+points(log(temp[order(c(temp$MEFENTRIFLUCONAZOLE)),"MEFENTRIFLUCONAZOLE"]),
+       bg=cooloor[6],pch=21,cex=1,las=1)
+points(log(temp[order(c(temp$METCONAZOLE)),"METCONAZOLE"]),
+       bg=cooloor[7],pch=21,cex=1,las=1)
+points(log(temp[order(c(temp$PROCHLORAZE)),"PROCHLORAZE"]),
+       bg=cooloor[8],pch=21,cex=1,las=1)
+points(log(temp[order(c(temp$`PROTHIOCONAZOLE-DESTHIO`)),
+                "PROTHIOCONAZOLE-DESTHIO"]),
+       bg=cooloor[9],pch=21,cex=1,las=1)
+points(log(temp[order(c(temp$TEBUCONAZOLE)),"TEBUCONAZOLE"]),
+       bg=cooloor[10],pch=21,cex=1,las=1,)
+points(log(temp[order(c(temp$TETRACONAZOLE)),"TETRACONAZOLE"]),
+       bg=cooloor[11],pch=21,cex=1,las=1)
+legend(60,-1,legend=c("CYPROCONAZOLE","DIFENOCONAZOLE","EPOXICONAZOLE",
+                      "FLUTRIAFOL","MEFENTRIFLUCONAZOLE","METCONAZOLE",
+                      "PROCHLORAZE","PROTHIOCONAZOLE-DESTHIO","TEBUCONAZOLE",
+                      "TETRACONAZOLE"),
+       cex=1,pt.cex=1.3,
+       y.intersp=0.7,x.intersp=1.2,
+       pch=c(15),
+       col=cooloor[c(1,2,3,5,6,7,8,9,10,11)],
+       bty="n")
+#export to .pdf 8 x 7 inches
 
 
 ##############################################################################/
@@ -538,39 +870,7 @@ plot(temp[order(c(temp$TETRACONAZOLE)),"TETRACONAZOLE"],
 par(op)
 #export to pdf 14 x 10 inches
 
-#same plot but combine on one figure and with log(EC50)
-plot(log(temp[order(c(temp$CYPROCONAZOLE)),"CYPROCONAZOLE"]),
-     main="log EC50 distribution",bg=cooloor[1],pch=21,cex=1,las=1,
-     ylab="log(EC50)",ylim=c(-6,6))
-points(log(temp[order(c(temp$DIFENOCONAZOLE)),"DIFENOCONAZOLE"]),
-       bg=cooloor[2],pch=21,cex=1,las=1)
-points(log(temp[order(c(temp$EPOXICONAZOLE)),"EPOXICONAZOLE"]),
-       bg=cooloor[3],pch=21,cex=1,las=1)
-points(log(temp[order(c(temp$FLUTRIAFOL)),"FLUTRIAFOL"]),
-       bg=cooloor[5],pch=21,cex=1,las=1)
-points(log(temp[order(c(temp$MEFENTRIFLUCONAZOLE)),"MEFENTRIFLUCONAZOLE"]),
-       bg=cooloor[6],pch=21,cex=1,las=1)
-points(log(temp[order(c(temp$METCONAZOLE)),"METCONAZOLE"]),
-       bg=cooloor[7],pch=21,cex=1,las=1)
-points(log(temp[order(c(temp$PROCHLORAZE)),"PROCHLORAZE"]),
-       bg=cooloor[8],pch=21,cex=1,las=1)
-points(log(temp[order(c(temp$`PROTHIOCONAZOLE-DESTHIO`)),
-                "PROTHIOCONAZOLE-DESTHIO"]),
-       bg=cooloor[9],pch=21,cex=1,las=1)
-points(log(temp[order(c(temp$TEBUCONAZOLE)),"TEBUCONAZOLE"]),
-       bg=cooloor[10],pch=21,cex=1,las=1,)
-points(log(temp[order(c(temp$TETRACONAZOLE)),"TETRACONAZOLE"]),
-       bg=cooloor[11],pch=21,cex=1,las=1)
-legend(60,-1,legend=c("CYPROCONAZOLE","DIFENOCONAZOLE","EPOXICONAZOLE",
-                      "FLUTRIAFOL","MEFENTRIFLUCONAZOLE","METCONAZOLE",
-                      "PROCHLORAZE","PROTHIOCONAZOLE-DESTHIO","TEBUCONAZOLE",
-                      "TETRACONAZOLE"),
-       cex=1,pt.cex=1.3,
-       y.intersp=0.7,x.intersp=1.2,
-       pch=c(15),
-       col=cooloor[c(1,2,3,5,6,7,8,9,10,11)],
-       bty="n")
-#export to .pdf 8 x 7 inches
+
 
 
 ##############################################################################/
