@@ -395,7 +395,7 @@ box(bty="l")
 par(op)
 #adding RF based on the mean CI50 of the 15 most sensitive individual (
 #approximately 10% of the tested strains)
-sensit<-mean(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))])[1:2])
+sensit<-mean(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))])[1:20])
 byprod$factres<-byprod$ED50.abs/sensit
 byprod<-byprod[order(as.numeric(byprod$factres)),]
 VenGFR<-rbind(VenGFR,byprod[,c(1:4,24:26)])
@@ -595,8 +595,8 @@ i<-1
 plot(AltFR[AltFR$ActiveSub==levels(AltFR$ActiveSub)[i],"factres"],log="y",
      pch=as.numeric(AltFR[AltFR$ActiveSub==levels(AltFR$ActiveSub)[i],
                           "species"])+20,
-     main="Distribution FR Alternaria",ylim=bornes,cex=1.5,las=1,
-     ylab="FR",bg=cooloor[i])
+     main="Alternaria Mycelium",ylim=bornes,cex=1.5,las=1,
+     ylab="FR",xlab=NA,bg=cooloor[i])
 abline(h=10,col=grey(0.3,0.8),lwd=5,lty=2)
 abline(h=100,col=grey(0.3,0.8),lwd=5,lty=2)
 i<-2
@@ -619,14 +619,15 @@ points(AltFR[AltFR$ActiveSub==levels(AltFR$ActiveSub)[i],"factres"],
        pch=as.numeric(AltFR[AltFR$ActiveSub==levels(AltFR$ActiveSub)[i],
                             "species"])+20,
        cex=1.5,las=1,bg=cooloor[i])
-legend(20,0.8,legend=levels(AltFR$ActiveSub),
+legend(20,0.8,#legend=levels(AltFR$ActiveSub),
+       legend=c("boscalide","cyprodinil","difénoconazole","dodine","fluopyram"),
        cex=1.5,pt.cex=1.5,
        y.intersp=1,x.intersp=1,
        pch=c(15),
        col=cooloor[c(1,2,3,4,5)],
        bty="n")
 legend(1.5,85,legend=levels(AltFR$species),cex=1.5,
-       pt.cex=1.6,y.intersp=1,x.intersp=1,
+       pt.cex=1.6,y.intersp=1,x.intersp=1,text.font=3,
        pch=c(21,22,23),bty="n")
 #export to .pdf 6 x 6
 
@@ -636,8 +637,8 @@ i<-1
 plot(VenGFR[VenGFR$ActiveSub==levels(VenGFR$ActiveSub)[i],"factres"],log="y",
      pch=as.numeric(VenGFR[VenGFR$ActiveSub==levels(VenGFR$ActiveSub)[i],
                           "species"])+20,
-     main="Distribution FR Venturia Germination",ylim=bornes,cex=1.5,las=1,
-     ylab="FR",bg=cooloor[i])
+     main="Venturia Germination",ylim=bornes,cex=1.5,las=1,
+     ylab="FR",xlab=NA,bg=cooloor[i])
 abline(h=10,col=grey(0.3,0.8),lwd=5,lty=2)
 abline(h=100,col=grey(0.3,0.8),lwd=5,lty=2)
 i<-2
@@ -680,14 +681,16 @@ points(VenGFR[VenGFR$ActiveSub==levels(VenGFR$ActiveSub)[i],"factres"],
        pch=as.numeric(VenGFR[VenGFR$ActiveSub==levels(VenGFR$ActiveSub)[i],
                              "species"])+20,
        cex=1.5,las=1,bg=cooloor[i])
-legend(15,1,legend=levels(VenGFR$ActiveSub),
+legend(15,1,#legend=levels(VenGFR$ActiveSub),
+       legend=c("boscalide","captane","cyprodinil","dithianon",
+                "dodine","mancozèbe","manèbe","thirame"),
        cex=1.5,pt.cex=1.5,
        y.intersp=1,x.intersp=1,
        pch=c(15),ncol=2,
        col=cooloor[c(1,2,3,4,5,6,7,8,9)],
        bty="n")
 legend(2,85,legend=levels(VenGFR$species),cex=1.5,
-       pt.cex=1.6,y.intersp=1,x.intersp=1,
+       pt.cex=1.6,y.intersp=1,x.intersp=1,text.font=3,
        pch=c(21,22,23),bty="n")
 #export to .pdf 6 x 6
 
@@ -696,8 +699,8 @@ i<-1
 plot(VenMFR[VenMFR$ActiveSub==levels(VenMFR$ActiveSub)[i],"factres"],log="y",
      pch=as.numeric(VenMFR[VenMFR$ActiveSub==levels(VenMFR$ActiveSub)[i],
                            "species"])+20,
-     main="Distribution FR Venturia Mycelium",ylim=bornes,cex=1.5,las=1,
-     ylab="FR",bg=cooloor[i])
+     main="Venturia Mycelium",ylim=bornes,cex=1.5,las=1,
+     ylab="FR",xlab=NA,bg=cooloor[i])
 abline(h=10,col=grey(0.3,0.8),lwd=5,lty=2)
 abline(h=100,col=grey(0.3,0.8),lwd=5,lty=2)
 i<-2
@@ -705,14 +708,15 @@ points(VenMFR[VenMFR$ActiveSub==levels(VenMFR$ActiveSub)[i],"factres"],
        pch=as.numeric(VenMFR[VenMFR$ActiveSub==levels(VenMFR$ActiveSub)[i],
                              "species"])+20,
        cex=1.5,las=1,bg=cooloor[i])
-legend(22,0.8,legend=levels(VenMFR$ActiveSub),
+legend(15,0.8,#legend=levels(VenMFR$ActiveSub),
+       legend=c("difénoconazole","trifloxystrobine (+sham 80)"),
        cex=1.5,pt.cex=1.5,
        y.intersp=1,x.intersp=1,
        pch=c(15),
        col=cooloor[c(1,2)],
        bty="n")
 legend(2,3000,legend=levels(VenMFR$species),cex=1.5,
-       pt.cex=1.6,y.intersp=1,x.intersp=1,
+       pt.cex=1.6,y.intersp=1,x.intersp=1,text.font=3,
        pch=c(21,22,23),bty="n")
 #export to .pdf 6 x 6
 par(op)
