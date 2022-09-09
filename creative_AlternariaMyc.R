@@ -7,7 +7,9 @@
 source("creative_load_data.R")
 
 #temporary data set loading waiting for the true final data set
-AlterMyc.dat<-creadat[creadat$species=="Alternaria sp.",]
+AlterMyc.dat<-creadat[creadat$species=="Alternaria sp" |
+                        creadat$species=="Alternaria alternata" |
+                        creadat$species=="Alternaria arborescens",]
 
 #removing missing data
 AlterMyc.dat<-AlterMyc.dat[!is.na(AlterMyc.dat$perc_croiss),]

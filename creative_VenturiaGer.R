@@ -7,7 +7,9 @@
 source("creative_load_data.R")
 
 #temporary data set loading waiting for the true final data set
-VentuGer.dat<-creadat[creadat$species!="Alternaria sp." & 
+VentuGer.dat<-creadat[creadat$species!="Alternaria sp" & 
+                        creadat$species!="Alternaria alternata" &
+                        creadat$species!="Alternaria arborescens" &
                         creadat$test_type=="spore_germ",]
 
 #removing missing data

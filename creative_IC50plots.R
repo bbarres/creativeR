@@ -64,6 +64,7 @@ sensit<-mean(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))])[1:1
 byprod$factres<-byprod$ED50.abs/sensit
 byprod<-byprod[order(as.numeric(byprod$factres)),]
 AltFR<-byprod[,c(1:4,24:26)]
+plot(AltFR[AltFR$ActiveSub=="boscalid","factres"])
 
 
 #cyprodinil
@@ -462,7 +463,7 @@ sensit<-mean(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))])[1:2
 byprod$factres<-byprod$ED50.abs/sensit
 byprod<-byprod[order(as.numeric(byprod$factres)),]
 VenGFR<-rbind(VenGFR,byprod[,c(1:4,24:26)])
-plot(VenGFR[VenGFR$ActiveSub=="manebe","factres"])
+plot(VenGFR[VenGFR$ActiveSub=="maneb","factres"])
 
 
 #thirame
@@ -576,7 +577,7 @@ sensit<-mean(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))])[1:2
 byprod$factres<-byprod$ED50.abs/sensit
 byprod<-byprod[order(as.numeric(byprod$factres)),]
 VenMFR<-rbind(VenMFR,byprod[,c(1:4,24:26)])
-plot(VenMFR[VenMFR$ActiveSub=="trifloxystrobine","factres"])
+plot(VenMFR[VenMFR$ActiveSub=="trifloxystrobine_sham80","factres"])
 
 VenMFR<-drop.levels(VenMFR,reorder=FALSE)
 
@@ -585,6 +586,7 @@ VenMFR<-drop.levels(VenMFR,reorder=FALSE)
 #Multi FR plot####
 ##############################################################################/
 
+pdf(file="output/FRdistribution.pdf",width=13,height=5)
 cooloor<- brewer.pal(12,"Set3")
 options(scipen=10000)
 op<-par(mfrow=c(1,3))
@@ -593,7 +595,7 @@ i<-1
 plot(AltFR[AltFR$ActiveSub==levels(AltFR$ActiveSub)[i],"factres"],log="y",
      pch=as.numeric(AltFR[AltFR$ActiveSub==levels(AltFR$ActiveSub)[i],
                           "species"])+20,
-     main="Distribution FR Alternaria",ylim=bornes,cex=1,las=1,
+     main="Distribution FR Alternaria",ylim=bornes,cex=1.5,las=1,
      ylab="FR",bg=cooloor[i])
 abline(h=10,col=grey(0.3,0.8),lwd=5,lty=2)
 abline(h=100,col=grey(0.3,0.8),lwd=5,lty=2)
@@ -601,28 +603,31 @@ i<-2
 points(AltFR[AltFR$ActiveSub==levels(AltFR$ActiveSub)[i],"factres"],
        pch=as.numeric(AltFR[AltFR$ActiveSub==levels(AltFR$ActiveSub)[i],
                             "species"])+20,
-       cex=1,las=1,bg=cooloor[i])
+       cex=1.5,las=1,bg=cooloor[i])
 i<-3
 points(AltFR[AltFR$ActiveSub==levels(AltFR$ActiveSub)[i],"factres"],
        pch=as.numeric(AltFR[AltFR$ActiveSub==levels(AltFR$ActiveSub)[i],
                             "species"])+20,
-       cex=1,las=1,bg=cooloor[i])
+       cex=1.5,las=1,bg=cooloor[i])
 i<-4
 points(AltFR[AltFR$ActiveSub==levels(AltFR$ActiveSub)[i],"factres"],
        pch=as.numeric(AltFR[AltFR$ActiveSub==levels(AltFR$ActiveSub)[i],
                             "species"])+20,
-       cex=1,las=1,bg=cooloor[i])
+       cex=1.5,las=1,bg=cooloor[i])
 i<-5
 points(AltFR[AltFR$ActiveSub==levels(AltFR$ActiveSub)[i],"factres"],
        pch=as.numeric(AltFR[AltFR$ActiveSub==levels(AltFR$ActiveSub)[i],
                             "species"])+20,
-       cex=1,las=1,bg=cooloor[i])
-legend(20,0.5,legend=levels(AltFR$ActiveSub),
-       cex=1,pt.cex=1.3,
-       y.intersp=1,x.intersp=1.2,
+       cex=1.5,las=1,bg=cooloor[i])
+legend(20,0.8,legend=levels(AltFR$ActiveSub),
+       cex=1.5,pt.cex=1.5,
+       y.intersp=1,x.intersp=1,
        pch=c(15),
        col=cooloor[c(1,2,3,4,5)],
        bty="n")
+legend(1.5,85,legend=levels(AltFR$species),cex=1.5,
+       pt.cex=1.6,y.intersp=1,x.intersp=1,
+       pch=c(21,22,23),bty="n")
 #export to .pdf 6 x 6
 
 bornes<-c(min(VenGFR$factres,na.rm=TRUE),
@@ -631,7 +636,7 @@ i<-1
 plot(VenGFR[VenGFR$ActiveSub==levels(VenGFR$ActiveSub)[i],"factres"],log="y",
      pch=as.numeric(VenGFR[VenGFR$ActiveSub==levels(VenGFR$ActiveSub)[i],
                           "species"])+20,
-     main="Distribution FR Venturia Germination",ylim=bornes,cex=1,las=1,
+     main="Distribution FR Venturia Germination",ylim=bornes,cex=1.5,las=1,
      ylab="FR",bg=cooloor[i])
 abline(h=10,col=grey(0.3,0.8),lwd=5,lty=2)
 abline(h=100,col=grey(0.3,0.8),lwd=5,lty=2)
@@ -639,50 +644,50 @@ i<-2
 points(VenGFR[VenGFR$ActiveSub==levels(VenGFR$ActiveSub)[i],"factres"],
        pch=as.numeric(VenGFR[VenGFR$ActiveSub==levels(VenGFR$ActiveSub)[i],
                             "species"])+20,
-       cex=1,las=1,bg=cooloor[i])
+       cex=1.5,las=1,bg=cooloor[i])
 i<-3
 points(VenGFR[VenGFR$ActiveSub==levels(VenGFR$ActiveSub)[i],"factres"],
        pch=as.numeric(VenGFR[VenGFR$ActiveSub==levels(VenGFR$ActiveSub)[i],
                             "species"])+20,
-       cex=1,las=1,bg=cooloor[i])
+       cex=1.5,las=1,bg=cooloor[i])
 i<-4
 points(VenGFR[VenGFR$ActiveSub==levels(VenGFR$ActiveSub)[i],"factres"],
        pch=as.numeric(VenGFR[VenGFR$ActiveSub==levels(VenGFR$ActiveSub)[i],
                             "species"])+20,
-       cex=1,las=1,bg=cooloor[i])
+       cex=1.5,las=1,bg=cooloor[i])
 i<-5
 points(VenGFR[VenGFR$ActiveSub==levels(VenGFR$ActiveSub)[i],"factres"],
        pch=as.numeric(VenGFR[VenGFR$ActiveSub==levels(VenGFR$ActiveSub)[i],
                             "species"])+20,
-       cex=1,las=1,bg=cooloor[i])
+       cex=1.5,las=1,bg=cooloor[i])
 i<-6
 points(VenGFR[VenGFR$ActiveSub==levels(VenGFR$ActiveSub)[i],"factres"],
        pch=as.numeric(VenGFR[VenGFR$ActiveSub==levels(VenGFR$ActiveSub)[i],
                              "species"])+20,
-       cex=1,las=1,bg=cooloor[i])
+       cex=1.5,las=1,bg=cooloor[i])
 i<-7
 points(VenGFR[VenGFR$ActiveSub==levels(VenGFR$ActiveSub)[i],"factres"],
        pch=as.numeric(VenGFR[VenGFR$ActiveSub==levels(VenGFR$ActiveSub)[i],
                              "species"])+20,
-       cex=1,las=1,bg=cooloor[i])
+       cex=1.5,las=1,bg=cooloor[i])
 i<-8
 points(VenGFR[VenGFR$ActiveSub==levels(VenGFR$ActiveSub)[i],"factres"],
        pch=as.numeric(VenGFR[VenGFR$ActiveSub==levels(VenGFR$ActiveSub)[i],
                              "species"])+20,
-       cex=1,las=1,bg=cooloor[i])
+       cex=1.5,las=1,bg=cooloor[i])
 i<-9
 points(VenGFR[VenGFR$ActiveSub==levels(VenGFR$ActiveSub)[i],"factres"],
        pch=as.numeric(VenGFR[VenGFR$ActiveSub==levels(VenGFR$ActiveSub)[i],
                              "species"])+20,
-       cex=1,las=1,bg=cooloor[i])
-legend(30,1,legend=levels(VenGFR$ActiveSub),
-       cex=1,pt.cex=1.3,
-       y.intersp=1,x.intersp=1.2,
-       pch=c(15),
+       cex=1.5,las=1,bg=cooloor[i])
+legend(15,1,legend=levels(VenGFR$ActiveSub),
+       cex=1.5,pt.cex=1.5,
+       y.intersp=1,x.intersp=1,
+       pch=c(15),ncol=2,
        col=cooloor[c(1,2,3,4,5,6,7,8,9)],
        bty="n")
-legend(10,0.7,legend=levels(VenGFR$species),cex=1,
-       pt.cex=1.3,y.intersp=1,x.intersp=1.2,
+legend(2,85,legend=levels(VenGFR$species),cex=1.5,
+       pt.cex=1.6,y.intersp=1,x.intersp=1,
        pch=c(21,22,23),bty="n")
 #export to .pdf 6 x 6
 
@@ -691,7 +696,7 @@ i<-1
 plot(VenMFR[VenMFR$ActiveSub==levels(VenMFR$ActiveSub)[i],"factres"],log="y",
      pch=as.numeric(VenMFR[VenMFR$ActiveSub==levels(VenMFR$ActiveSub)[i],
                            "species"])+20,
-     main="Distribution FR Venturia Germination",ylim=bornes,cex=1,las=1,
+     main="Distribution FR Venturia Mycelium",ylim=bornes,cex=1.5,las=1,
      ylab="FR",bg=cooloor[i])
 abline(h=10,col=grey(0.3,0.8),lwd=5,lty=2)
 abline(h=100,col=grey(0.3,0.8),lwd=5,lty=2)
@@ -699,19 +704,20 @@ i<-2
 points(VenMFR[VenMFR$ActiveSub==levels(VenMFR$ActiveSub)[i],"factres"],
        pch=as.numeric(VenMFR[VenMFR$ActiveSub==levels(VenMFR$ActiveSub)[i],
                              "species"])+20,
-       cex=1,las=1,bg=cooloor[i])
-legend(40,0.8,legend=levels(VenMFR$ActiveSub),
-       cex=1,pt.cex=1.3,
-       y.intersp=1,x.intersp=1.2,
+       cex=1.5,las=1,bg=cooloor[i])
+legend(22,0.8,legend=levels(VenMFR$ActiveSub),
+       cex=1.5,pt.cex=1.5,
+       y.intersp=1,x.intersp=1,
        pch=c(15),
        col=cooloor[c(1,2)],
        bty="n")
-legend(20,0.8,legend=levels(VenMFR$species),cex=1,
-       pt.cex=1.3,y.intersp=1,x.intersp=1.2,
+legend(2,3000,legend=levels(VenMFR$species),cex=1.5,
+       pt.cex=1.6,y.intersp=1,x.intersp=1,
        pch=c(21,22,23),bty="n")
 #export to .pdf 6 x 6
-
 par(op)
+dev.off()
+
 
 
 #same plot but combine on one figure and with log(EC50)
