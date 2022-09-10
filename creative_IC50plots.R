@@ -723,6 +723,14 @@ par(op)
 dev.off()
 
 
+##############################################################################/
+#END
+##############################################################################/
+
+
+
+
+
 
 #same plot but combine on one figure and with log(EC50)
 plot(log(temp[order(c(temp$CYPROCONAZOLE)),"CYPROCONAZOLE"]),
