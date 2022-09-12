@@ -331,7 +331,7 @@ box(bty="l")
 par(op)
 #adding RF based on the mean CI50 of the 15 most sensitive individual (
 #approximately 10% of the tested strains)
-sensit<-mean(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))])[1:20])
+sensit<-mean(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))])[1:15])
 byprod$factres<-byprod$ED50.abs/sensit
 byprod<-byprod[order(as.numeric(byprod$factres)),]
 VenGFR<-rbind(VenGFR,byprod[,c(1:4,24:26)])
@@ -395,7 +395,7 @@ box(bty="l")
 par(op)
 #adding RF based on the mean CI50 of the 15 most sensitive individual (
 #approximately 10% of the tested strains)
-sensit<-mean(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))])[1:20])
+sensit<-mean(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))])[1:15])
 byprod$factres<-byprod$ED50.abs/sensit
 byprod<-byprod[order(as.numeric(byprod$factres)),]
 VenGFR<-rbind(VenGFR,byprod[,c(1:4,24:26)])
@@ -427,7 +427,7 @@ box(bty="l")
 par(op)
 #adding RF based on the mean CI50 of the 15 most sensitive individual (
 #approximately 10% of the tested strains)
-sensit<-mean(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))])[1:20])
+sensit<-mean(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))])[1:15])
 byprod$factres<-byprod$ED50.abs/sensit
 byprod<-byprod[order(as.numeric(byprod$factres)),]
 VenGFR<-rbind(VenGFR,byprod[,c(1:4,24:26)])
@@ -459,7 +459,7 @@ box(bty="l")
 par(op)
 #adding RF based on the mean CI50 of the 15 most sensitive individual (
 #approximately 10% of the tested strains)
-sensit<-mean(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))])[1:20])
+sensit<-mean(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))])[1:15])
 byprod$factres<-byprod$ED50.abs/sensit
 byprod<-byprod[order(as.numeric(byprod$factres)),]
 VenGFR<-rbind(VenGFR,byprod[,c(1:4,24:26)])
@@ -541,7 +541,7 @@ box(bty="l")
 par(op)
 #adding RF based on the mean CI50 of the 15 most sensitive individual (
 #approximately 10% of the tested strains)
-sensit<-mean(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))])[1:20])
+sensit<-mean(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))])[1:15])
 byprod$factres<-byprod$ED50.abs/sensit
 byprod<-byprod[order(as.numeric(byprod$factres)),]
 VenMFR<-byprod[,c(1:4,24:26)]
@@ -573,7 +573,7 @@ box(bty="l")
 par(op)
 #adding RF based on the mean CI50 of the 15 most sensitive individual (
 #approximately 10% of the tested strains)
-sensit<-mean(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))])[1:20])
+sensit<-mean(as.numeric(byprod$ED50.abs[order(as.numeric(byprod$ED50.abs))])[1:15])
 byprod$factres<-byprod$ED50.abs/sensit
 byprod<-byprod[order(as.numeric(byprod$factres)),]
 VenMFR<-rbind(VenMFR,byprod[,c(1:4,24:26)])
@@ -721,6 +721,11 @@ legend(2,3000,legend=levels(VenMFR$species),cex=1.5,
 #export to .pdf 6 x 6
 par(op)
 dev.off()
+
+#export FR results to a file
+FRresult<-rbind(AltFR,VenMFR,VenGFR)
+write.table(FRresult,file="output/FRresult.txt",sep="\t",quote=FALSE,
+            row.names=FALSE)
 
 
 ##############################################################################/
